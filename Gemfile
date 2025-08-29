@@ -49,6 +49,9 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # RSpec本体とRails用拡張
+  gem "rspec-rails"
 end
 
 group :development do
@@ -61,6 +64,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-
-
-
