@@ -1,0 +1,23 @@
+<nav class="navbar bg-dark" data-bs-theme="dark">
+    <div class="container-fluid ">
+        <%= link_to "サボり魔人", root_path, class: "navbar-brand fw-bold fs-2 ms-3 me-auto"%>
+        <ul class="navbar-nav d-flex flex-row ms-auto align-items-center">
+            <% if user_signed_in? %>
+                <%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "nav-link text-white active me-5"%>
+                <li class = "nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white me-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        メニュー
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end position-absolute">
+                        <li><%= link_to "プロフィール", "#", class: "dropdown-item"%></li>
+                        <li><%= link_to "新規タスク", "#", class: "dropdown-item"%></li>
+                        <li><%= link_to "個人成績", "#", class: "dropdown-item"%></li>
+                    </ul>
+                </li>
+            <% else %>
+                <%= link_to "サインアップ", new_user_registration_path, class: "nav-link text-white active me-5"%>
+                <%= link_to "ログイン", new_user_session_path, class: "nav-link text-white active me-5"%>
+            <% end %>
+        </ul>
+    </div>
+</nav>
