@@ -1,0 +1,11 @@
+<nav class="navbar bg-dark" data-bs-theme="dark">
+    <div class="container-fluid">
+        <%= link_to "サボり魔人", '#', class: "navbar-brand fw-bold fs-2 ms-3 me-auto"%>
+        <% if user_signed_in? %>
+            <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "nav-link text-white active me-5"%>
+        <% else %>
+            <%= link_to "サインアップ", new_user_registration_path, class: "nav-link text-white active me-5"%>
+            <%= link_to "ログイン", new_user_session_path, class: "nav-link text-white active me-3"%>
+        <% end %>
+    </div>
+</nav>
