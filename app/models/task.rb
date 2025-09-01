@@ -5,5 +5,5 @@ class Task < ApplicationRecord
         working:   "working",
         stopped:   "stopped",
         done:      "done"
-    }
+    }, _prefix: true
 end
