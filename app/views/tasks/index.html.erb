@@ -1,5 +1,5 @@
 <h1>今日のタスク一覧</h1>
-
+<p>今日のタスク件数: <%= @tasks.count %></p>
 <% if @tasks.any? %>
   <ul>
     <% @tasks.each do |task| %>
@@ -14,3 +14,5 @@
 <% else %>
   <p>今日はタスクがありません。</p>
 <% end %>
+
+<%= link_to '新規タスク作成', new_task_path, class: "btn btn-primary" %>
