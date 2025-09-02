@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :users
   get "report", to: "reports#show", as: "report"
   devise_for :users
   resources :tasks
