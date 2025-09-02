@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get "report", to: "reports#show", as: "report"
   devise_for :users
   resources :tasks
+  resources :users, only: [:show]
   root 'tasks#index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
