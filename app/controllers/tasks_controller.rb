@@ -28,9 +28,9 @@ class TasksController < ApplicationController
       @task.planned_finish_at = planned_finish_at
       
       if @task.save
-        redirect_to tasks_path, notice: "タスクを作成しました"
+        redirect_to tasks_path
       else
-        render :new
+        render :new, status: :unprocessable_entity
       end
     end
 
