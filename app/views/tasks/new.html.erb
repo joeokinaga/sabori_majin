@@ -1,0 +1,28 @@
+<h1>新規タスク</h1>
+<%= form_with(model: @task) do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+
+    <%= f.label :title, "タスク名", class: "form-label" %>
+    <%= f.text_field :title, class: "form-control" %>
+
+    <%= f.label :content, "内容", class: "form-label" %>
+    <%= f.text_area :content, class: "form-control", rows: 2 %>
+
+    <label>予定時間</label>
+    <div style="display: flex; gap: 8px;">
+
+      <%= f.date_field :planned_date, class: "form-control" %>
+
+      <%= f.number_field :start_hour, in: 0..23, class: "form-control", placeholder: "時" %> :
+      <%= f.number_field :start_minute, in: 0..59, class: "form-control", placeholder: "分" %> 〜
+
+      <%= f.number_field :finish_hour, in: 0..23, class: "form-control", placeholder: "時" %> :
+      <%= f.number_field :finish_minute, in: 0..59, class: "form-control", placeholder: "分" %>
+    </div>
+  <%= f.submit "作成", class: "btn btn-primary" %>
+<% end %>
+
+
+
+
+

@@ -1,6 +1,18 @@
-<h1>今日のタスク</h1>
-<div>
-  <button>
-  <div></div>
-  <button>
-</div>
+<h1>今日のタスク一覧</h1>
+<p>今日のタスク件数: <%= @tasks.count %></p>
+<% if @tasks.any? %>
+  <ul>
+    <% @tasks.each do |task| %>
+      <li>
+        <strong><%= task.title %></strong><br>
+        内容: <%= task.content %><br>
+        開始予定: <%= task.planned_start_at.strftime('%Y-%m-%d %H:%M') %><br>
+        終了予定: <%= task.planned_finish_at.strftime('%Y-%m-%d %H:%M') if task.planned_finish_at %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>今日はタスクがありません。</p>
+<% end %>
+
+<%= link_to '新規タスク作成', new_task_path, class: "btn btn-primary" %>
