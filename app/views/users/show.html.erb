@@ -1,8 +1,37 @@
-<%= gravatar_for @user %>
-<%= @user.name %>
+<div class = "d-flex justify-content-around align-items-center pt-3">
+    <%= gravatar_for @user %>
+    <div class = "fs-3 fw-bold"><%= @user.name %></div>
+    
+    AIからの一言
+</div>
+<div class = "d-flex justify-content-around pt-5">
+    <div class = "card col-3">
+        <h5 class = "card-header">トータルスコア</h5>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <div class = "fs-6">完了</div>
+                <div class = "text-center"><%= @done_task_all %> pt</div>
+            </li>
+            <li class="list-group-item">
+                <div class = "fs-6">サボり</div>
+                <div class = "text-center"><%= @skip_task_all %> pt</div>
+            </li>
+        </ul>
+    </div>
+    <div class = "card col-3">
+        <h5 class = "card-header">今週のスコア</h5>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <div class = "fs-6">完了</div>
+                <div class = "text-center"><%= @done_task_week %> pt</div>
+            </li>
+            <li class="list-group-item">
+                <div class = "fs-6">サボり</div>
+                <div class = "text-center"><%= @skip_task_week %> pt</div>
+            </li>
+        </ul>
+    </div>
+</div>
 
-<%= @done_task_all %>
-<%= @done_task_week %>
-<%= @skip_task_all %>
-<%= @skip_task_week %>
+
 
