@@ -9,7 +9,7 @@
                         メニュー
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end position-absolute">
-                        <li><%= link_to "プロフィール", "#", class: "dropdown-item"%></li>
+                        <li><%= link_to "プロフィール", user_path(current_user), class: "dropdown-item"%></li>
                         <li><%= link_to "新規タスク", "#", class: "dropdown-item"%></li>
                         <li><%= link_to "個人成績", "#", class: "dropdown-item"%></li>
                     </ul>
