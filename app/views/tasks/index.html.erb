@@ -1,18 +1,41 @@
-<h1>今日のタスク一覧</h1>
-<p>今日のタスク件数: <%= @tasks.count %></p>
-<% if @tasks.any? %>
-  <ul>
-    <% @tasks.each do |task| %>
-      <li>
-        <strong><%= task.title %></strong><br>
-        内容: <%= task.content %><br>
-        開始予定: <%= task.planned_start_at.strftime('%Y-%m-%d %H:%M') %><br>
-        終了予定: <%= task.planned_finish_at.strftime('%Y-%m-%d %H:%M') if task.planned_finish_at %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>今日はタスクがありません。</p>
-<% end %>
+<div class="container my-5 py-5" style="max-width:1200px;">
+  <h1 class="text-center fw-bold mb-5" style="font-size:3rem;">今日のタスク</h1>
+  <div class="row justify-content-center align-items-start">
+    <!-- 左側: 個人成績 -->
+    <div class="col-md-3 d-flex justify-content-center mb-4 mb-md-0">
+      <div class="border text-center py-5 px-4" style="font-size:2rem; min-width:220px;">
+        個人成績
+      </div>
+    </div>
+    <!-- 中央: タスク一覧（カード使用） -->
+    <div class="col-md-6 d-flex flex-column align-items-center">
+      <% @tasks.each do |task| %>
+        <div class="card mb-4" style="min-width:320px; border:2px solid #222;">
+          <div class="card-body px-4 py-3">
+            <div class="d-flex justify-content-between align-items-center" style="font-size:1.35rem;">
+              <span><%= task.title %></span>
+              <span>
+                <%= link_to task_path(task), method: :delete, class: "ms-2 text-dark", style: "font-size:1.2em;", title: "削除", data: { confirm: "本当に削除しますか？" } do %>
+                  🗑️
+                <% end %>
+                <%= link_to edit_task_path(task), class: "ms-2 text-dark", style: "font-size:1.2em;", title: "編集" do %>
+                  ✏️
+                <% end %>
+              </span>
+            </div>
+            <div class="text-center mt-2" style="font-size:1.1rem;">
+              <%= "#{task.planned_start_at.strftime('%H:%M')}〜#{task.planned_finish_at.strftime('%H:%M')}" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <!-- 右側: タスクの新規作成 -->
+    <div class="col-md-3 d-flex justify-content-center mt-4 mt-md-0">
+      <%= link_to new_task_path, class: "btn btn-primary", style: "font-size:2rem; min-width:220px;" do %>
+        新規タスク作成
+      <% end %>
 
-<%= link_to '新規タスク作成', new_task_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+</div>
