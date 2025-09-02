@@ -1,29 +1,39 @@
 class ReportsController < ApplicationController
   # before_action :authenticate_user!
-  before_action :set_user_tasks, only: [ :show ]
-  def show
+  before_action :set_user_tasks, only: [ :daily, :weekly, :monthly, :yearly, :all ]
+
+  def daily
     @tasks_today = @user_tasks.where(planned_start_at: Date.today.all_day)
-    @tasks_week  = @user_tasks.where(planned_start_at: Date.today.all_week)
-    @tasks_month = @user_tasks.where(planned_start_at: Date.today.all_month)
-    @tasks_year  = @user_tasks.where(planned_start_at: Date.today.all_year)
-    @tasks_all   = @user_tasks
-
     @completation_rate_today = calc_completation_rate(@tasks_today)
-    @completation_rate_week = calc_completation_rate(@tasks_week)
-    @completation_rate_month = calc_completation_rate(@tasks_month)
-    @completation_rate_year = calc_completation_rate(@tasks_year)
-    @completation_rate_all = calc_completation_rate(@tasks_all)
-
     @total_time_today = calc_total_time(@tasks_today)
-    @total_time_week = calc_total_time(@tasks_week)
-    @total_time_month = calc_total_time(@tasks_month)
-    @total_time_year = calc_total_time(@tasks_year)
-    @total_time_all = calc_total_time(@tasks_all)
-
     @total_error_today = calc_task_time_error(@tasks_today)
+  end
+
+  def weekly
+    @tasks_week  = @user_tasks.where(planned_start_at: Date.today.all_week)
+    @completation_rate_week = calc_completation_rate(@tasks_week)
+    @total_time_week = calc_total_time(@tasks_week)
     @total_error_week = calc_task_time_error(@tasks_week)
+  end
+
+  def monthly
+    @tasks_month = @user_tasks.where(planned_start_at: Date.today.all_month)
+    @completation_rate_month = calc_completation_rate(@tasks_month)
+    @total_time_month = calc_total_time(@tasks_month)
     @total_error_month = calc_task_time_error(@tasks_month)
+  end
+
+  def yearly
+    @tasks_year  = @user_tasks.where(planned_start_at: Date.today.all_year)
+    @completation_rate_year = calc_completation_rate(@tasks_year)
+    @total_time_year = calc_total_time(@tasks_year)
     @total_error_year = calc_task_time_error(@tasks_year)
+  end
+
+  def all
+    @tasks_all   = @user_tasks
+    @completation_rate_all = calc_completation_rate(@tasks_all)
+    @total_time_all = calc_total_time(@tasks_all)
     @total_error_all = calc_task_time_error(@tasks_all)
   end
 
