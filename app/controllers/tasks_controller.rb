@@ -35,9 +35,39 @@ class TasksController < ApplicationController
     end
 
     def edit
+      @task = current_user.tasks.find(params[:id])
     end
 
     def update
+      date         = params[:task][:planned_date]
+      start_hour   = params[:task][:start_hour]
+      start_minute = params[:task][:start_minute]
+      finish_hour  = params[:task][:finish_hour]
+      finish_minute= params[:task][:finish_minute]
+    
+      planned_start_at =
+        if date.present? && start_hour.present? && start_minute.present?
+          Time.zone.parse("#{date} #{start_hour}:#{start_minute}")
+        else
+          nil
+        end
+    
+      planned_finish_at =
+        if date.present? && finish_hour.present? && finish_minute.present?
+          Time.zone.parse("#{date} #{finish_hour}:#{finish_minute}")
+        else
+          nil
+        end
+    
+      @task = current_user.tasks.find(params[:id])
+      if @task.update(task_params.merge(
+        planned_start_at: planned_start_at,
+        planned_finish_at: planned_finish_at
+      ))
+        redirect_to tasks_path, notice: "タスクを更新しました"
+      else
+        render :edit, status: :unprocessable_entity
+      end
     end
 
     def destroy
