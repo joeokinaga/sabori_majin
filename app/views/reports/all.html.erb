@@ -1,0 +1,96 @@
+<div class="container-fluid mt-5">
+    <div class="text-center">
+        <h1>Daily report</h1>
+        <%= link_to "Daily", daily_reports_path, class: "btn #{current_page?(daily_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "Weekly", weekly_reports_path, class: "btn #{current_page?(weekly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "Monthly", monthly_reports_path, class: "btn #{current_page?(monthly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "Yearly", yearly_reports_path, class: "btn #{current_page?(yearly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "All", all_reports_path, class: "btn #{current_page?(all_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+    </div>
+    <div class="row align-items-baseline">
+        <!-- 達成率 -->
+        <div class="col-md-4">
+            <h2 class=" mt-4">達成率 (%)</h2>
+            <canvas id="myChart"></canvas>
+            <table class="table table-striped">
+                <tbody>
+                    <td>
+                        <%= @completation_rate_all %>
+                    </td>
+                </tbody>
+            </table>
+            <!-- 合計誤差 -->
+            <h2 class="mt-5">誤差合計</h2>
+            <table class="table table-striped">
+                <tbody>
+                    <td>
+                        <%= (@total_error_all / 3600).floor %>時間
+                        <%= ((@total_error_all % 3600) / 60).floor %>分
+                    </td>
+                </tbody>
+            </table>
+        </div>
+        <!-- 合計学習時間 -->
+        <div class="col-md-4">
+            <h2 class="mt-5">総学習時間</h2>
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td>
+                            <%= (@total_time_all / 3600).floor %>時間
+                            <%= ((@total_time_all % 3600) / 60).floor %>分
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <h2>タスク一覧</h2>
+            <!-- スクロール可能なカード -->
+            <div class="card mt-4" style="max-height: 400px; overflow-y: auto;">
+                <div class="card-body">
+                    <% @tasks_all.each do |task| %>
+                    <div class="border-bottom mb-3 pb-2">
+                        <h5 class="card-title"><%= task.title %></h5>
+                        <p class="card-text"><%= task.content %></p>
+                        <p class="mb-0"><strong>ステータス:</strong> <%= task.status %> </p>
+                        <p class="mb-0"><strong>予定開始:</strong> <%= task.planned_start_at.strftime("%Y-%m-%d %H:%M") %></p>
+                        <p class="mb-0"><strong>予定終了:</strong> <%= task.planned_finish_at.strftime("%Y-%m-%d %H:%M") %></p>
+                        <p class="mb-0"><strong>実開始:</strong> <%= task.started_at ? task.started_at.strftime("%Y-%m-%d %H:%M") : "-" %></p>
+                        <p class="mb-0"><strong>実終了:</strong> <%= task.finished_at ? task.finished_at.strftime("%Y-%m-%d %H:%M") : "-" %></p>
+                    </div>
+                    <% end %>
+                    <% if @tasks_all.empty? %>
+                    <p>タスクはありません。</p>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("turbo:load", function() {
+        const ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['日', '月', '火', '水', '木', '金', '土'],
+                datasets: [{
+                    label: '達成率 (%)',
+                    data: [12, 19, 3, 5, 2, 3, 7], // ← ダミーデータ
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
