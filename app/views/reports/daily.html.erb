@@ -125,7 +125,7 @@ document.addEventListener("turbo:load", function() {
 		},
 		options: {
 			scales: {
-			y: { min: 0, max: 100, beginAtZero: true }
+			y: { min: 0, max: <%= (((@total_planned_working_time || 0) / 3600.0).round(1) + 1).to_json %>, beginAtZero: true }
 			}
 		}
 		}

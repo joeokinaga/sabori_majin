@@ -117,10 +117,10 @@ document.addEventListener("turbo:load", function() {
 		id: 'myChart3',
 		type: 'bar',
 		data: {
-			labels: ["総学習時間(h)"],
+			labels: ["日", "月", "火", "水", "木", "金", "土"],
 			datasets: [{
-			label: "総学習時間(h)",
-			data: [<%= (@total_time_week / 3600.0).round(1) %>],
+			label: "総勉強時間(h)",
+			data: <%= @total_time_week_per_day_hours.to_json %>,
 			backgroundColor: 'rgba(54, 162, 235, 0.5)',
 			borderColor: 'rgba(54, 162, 235, 1)',
 			borderWidth: 1
@@ -128,7 +128,7 @@ document.addEventListener("turbo:load", function() {
 		},
 		options: {
 			scales: {
-			y: { min: 0, max: 100, beginAtZero: true }
+			y: { beginAtZero: true }
 			}
 		}
 		}
