@@ -2,7 +2,11 @@ class TasksController < ApplicationController
     before_action :authenticate_user!
 
     def index 
-      @tasks = current_user.tasks.where(planned_start_at: Date.current.all_day).order(planned_start_at: :asc)
+      # @tasks = current_user.tasks.where(planned_start_at: Date.current.all_day).order(planned_start_at: :asc)
+      @tasks = current_user.tasks
+                           .where(planned_start_at: Date.current.all_day)
+                           .where('planned_finish_at > ?', Time.zone.now)
+                           .order(planned_start_at: :asc)
     end
 
     def show
@@ -74,6 +78,24 @@ class TasksController < ApplicationController
       @task = current_user.tasks.find(params[:id])
       @task.destroy
       redirect_to tasks_path, notice: "タスクを削除しました"
+    end
+
+    def start
+      @task = current_user.tasks.find(params[:id])
+      @task.working!
+      redirect_to @task
+    end
+    
+    def give_up
+      @task = current_user.tasks.find(params[:id])
+      @task.stopped!
+      redirect_to @task
+    end
+    
+    def finish
+      @task = current_user.tasks.find(params[:id])
+      @task.done!
+      redirect_to @task
     end
 
     private
