@@ -83,4 +83,38 @@ create_task(user, "明日やること", "明日のタスク内容", :unstarted, 
   end
 end
 
+now = Time.current
+Task.destroy_all
+
+#未着手なので5pt
+Task.create!(
+  title: "未着手で遅延",
+  status: :unstarted,
+  planned_start_at: Time.current - 60.minutes,
+  planned_finish_at: Time.current - 50.minutes,
+  user_id: user.id
+)
+
+#未完了、開始遅れ、所要時間短い 4pt
+Task.create!(
+  title: "停止したタスク",
+  status: :stopped,
+  planned_start_at: Time.current - 40.minutes,
+  planned_finish_at: Time.current - 30.minutes,
+  started_at: Time.current - 35.minutes,
+  finished_at: Time.current - 32.minutes,
+  user_id: user.id
+)
+
+#開始遅れ、所長時間短い 2pt
+Task.create!(
+  title: "開始遅れタスク",
+  status: :done,
+  planned_start_at: Time.current - 20.minutes,
+  planned_finish_at: Time.current - 10.minutes,
+  started_at: Time.current - 15.minutes,
+  finished_at: Time.current - 12.minutes,
+  user_id: user.id
+)
+
 puts "Seed finished! User: #{user.email}, Tasks: #{user.tasks.count}"
