@@ -5,8 +5,8 @@ class TasksController < ApplicationController
       # @tasks = current_user.tasks.where(planned_start_at: Date.current.all_day).order(planned_start_at: :asc)
       @tasks = current_user.tasks
                            .where(planned_start_at: Date.current.all_day)
-                           .where('planned_finish_at > ?', Time.zone.now)
                            .order(planned_start_at: :asc)
+                          #  .where('planned_finish_at > ?', Time.zone.now)
     end
 
     def show
@@ -32,7 +32,7 @@ class TasksController < ApplicationController
       @task.planned_finish_at = planned_finish_at
       
       if @task.save
-        redirect_to tasks_path
+        redirect_to tasks_path, notice: "タスクを作成しました"
       else
         render :new, status: :unprocessable_entity
       end
@@ -68,8 +68,7 @@ class TasksController < ApplicationController
         planned_start_at: planned_start_at,
         planned_finish_at: planned_finish_at
       ))
-        flash[:success] = "タスクを更新しました"
-        redirect_to tasks_path
+        redirect_to tasks_path, notice: "タスクを更新しました"
       else
         render :edit, status: :unprocessable_entity
       end
@@ -78,8 +77,12 @@ class TasksController < ApplicationController
     def destroy
       @task = current_user.tasks.find(params[:id])
       @task.destroy
+<<<<<<< HEAD
       # flash[:danger] = "タスクを削除しました"
       redirect_to tasks_path, success: "タスクを作成しました"
+=======
+      redirect_to tasks_path, alert: "タスクを削除しました"
+>>>>>>> main
     end
 
     def start
