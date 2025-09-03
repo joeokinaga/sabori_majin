@@ -1,73 +1,86 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
-# 既存ユーザーを削除（重複防止）
+# --- 既存ユーザー・タスクを削除 ---
 User.destroy_all
 Task.destroy_all
 
-# テストユーザーを作成
+
+# --- テストユーザー作成 ---
 user = User.create!(
-  name:  "Example User",
-  email: "example@railstutorial.org",
-  password: "foobar",
-  password_confirmation: "foobar"
+ name:  "Example User",
+ email: "han@gmail.com",
+ password: "hanhan",
+ password_confirmation: "hanhan"
 )
 
-statuses = [ :unstarted, :working, :stopped, :done ]
 
-# 今日のタスクを作成
-user.tasks.create!(
-  title: "今日やること1",
-  content: "テスト用タスクの内容1",
-  status: :done,
-  planned_start_at: Date.today.beginning_of_day,
-  planned_finish_at: Date.today.end_of_day,
-  started_at: Date.today.beginning_of_day + rand(0..2).hours,       # 適当に開始
-  finished_at: Date.today.beginning_of_day + rand(3..8).hours      # 適当に終了
-)
+statuses = %i[unstarted working stopped done]
 
-user.tasks.create!(
-  title: "今日やること2",
-  content: "テスト用タスクの内容2",
-  status: :unstarted,
-  planned_start_at: Date.today.beginning_of_day,
-  planned_finish_at: Date.today.end_of_day,
-  started_at: Date.today.beginning_of_day + rand(1..3).hours,
-  finished_at: Date.today.beginning_of_day + rand(4..9).hours
-)
 
-# 明日のタスク
-user.tasks.create!(
-  title: "明日やること",
-  content: "明日のタスク内容",
-  status: :unstarted,
-  planned_start_at: Date.tomorrow.beginning_of_day,
-  planned_finish_at: Date.tomorrow.end_of_day,
-  started_at: Date.tomorrow.beginning_of_day + rand(0..2).hours,
-  finished_at: Date.tomorrow.beginning_of_day + rand(3..8).hours
-)
+# --- 固定タスク（今日・明日） ---
+def create_task(user, title, content, status, planned_date, start_hour, duration_hours)
+ start_time = planned_date.beginning_of_day + start_hour.hours
+ end_time   = start_time + duration_hours.hours
 
-# 50個のタスクを作成
+
+ user.tasks.create!(
+   title: title,
+   content: content,
+   status: status,
+   planned_start_at: start_time,
+   planned_finish_at: end_time,
+   started_at: start_time,
+   finished_at: end_time
+ )
+end
+
+
+# 今日の固定タスク
+create_task(user, "今日やること1", "テスト用タスクの内容1", :done, Date.today, 0, 3)
+create_task(user, "今日やること2", "テスト用タスクの内容2", :unstarted, Date.today, 4, 3)
+
+
+# 明日の固定タスク
+create_task(user, "明日やること", "明日のタスク内容", :unstarted, Date.tomorrow, 1, 2)
+
+
+# --- ランダム50個のタスク作成（重複なし） ---
 50.times do |i|
   planned_date = Date.today + i.days
-  start_time = planned_date.beginning_of_day + rand(0..3).hours
-  end_time = planned_date.beginning_of_day + rand(4..10).hours
+  day_start = planned_date.beginning_of_day
+  day_end   = planned_date.end_of_day
 
-  user.tasks.create!(
-    title: "タスク#{i + 1}",
-    content: "テスト用タスクの内容#{i + 1}",
-    status: statuses.sample,
-    planned_start_at: planned_date.beginning_of_day,
-    planned_finish_at: planned_date.end_of_day,
-    started_at: start_time,
-    finished_at: end_time
-  )
+  # 既存タスクの時間帯を取得（配列で保持）
+  existing_intervals = user.tasks.where(planned_start_at: day_start..day_end)
+                                 .map { |t| [ t.started_at, t.finished_at ] }
+
+  loop do
+    start_time = day_start + rand(0..20).hours
+    duration   = rand(1..3).hours
+    # 計画上の終了時刻と、実際の終了時刻（1時間遅れ）を先に定義する
+    planned_finish_time = start_time + duration
+    actual_finish_time  = planned_finish_time + 1.hour
+
+    # 重複チェックでは「実際の終了時刻」を使用する
+    overlap = existing_intervals.any? do |existing_start, existing_end|
+      start_time < existing_end && existing_start < actual_finish_time
+    end
+
+    next if overlap # 重なっていたら再生成
+
+    # タスク作成
+    task = user.tasks.create!(
+      title: "タスク#{i + 1}",
+      content: "テスト用タスクの内容#{i + 1}",
+      status: statuses.sample,
+      planned_start_at: start_time,
+      planned_finish_at: planned_finish_time,  # 計画上の終了時刻
+      started_at: start_time,
+      finished_at: actual_finish_time          # 実際の終了時刻
+    )
+
+    # 作成したタスクを既存配列に追加
+    existing_intervals << [ task.started_at, task.finished_at ]
+    break
+  end
 end
 
 puts "Seed finished! User: #{user.email}, Tasks: #{user.tasks.count}"
