@@ -33,11 +33,12 @@
         </div>
         <!-- 合計学習時間 -->
         <div class="col-md-4">
-            <h2 class="mt-5">総学習時間</h2>
+            <h2 class="mt-5">今日の合計時間(h)</h2>
 			<canvas id="myChart3"></canvas>
             <table class="table table-striped">
                 <tbody>
                     <tr>
+						<th>今日の合計時間(h)</th>
                         <td>
                             <%= (@total_time_today / 3600).floor %>時間
                             <%= ((@total_time_today % 3600) / 60).floor %>分

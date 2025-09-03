@@ -33,11 +33,12 @@
         </div>
         <!-- 合計学習時間 -->
         <div class="col-md-4">
-            <h2 class="mt-5">総学習時間</h2>
+            <h2 class="mt-5">今月の週別時間(h)</h2>
 			<canvas id="myChart3"></canvas>
             <table class="table table-striped">
                 <tbody>
                     <tr>
+						<th>今月の合計時間(h)</th>
                         <td>
                             <%= (@total_time_month / 3600).floor %>時間
                             <%= ((@total_time_month % 3600) / 60).floor %>分
@@ -119,7 +120,7 @@ document.addEventListener("turbo:load", function() {
 		data: {
 			labels: ["第1週", "第２週", "第３週", "第４週"],
 			datasets: [{
-			label: "総学習時間(h)",
+			label: "合計時間(h)",
 			data: <%= @total_time_month_per_week_hours.to_json %>,
 			backgroundColor: 'rgba(54, 162, 235, 0.5)',
 			borderColor: 'rgba(54, 162, 235, 1)',
