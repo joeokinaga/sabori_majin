@@ -34,6 +34,10 @@ class ReportsController < ApplicationController
     end
     @completation_rate_month = calc_completation_rate(@tasks_month)
     @total_time_month = calc_total_time(@tasks_month)
+    @total_time_month_per_week_hours = calc_total_time_month(@tasks_month).values.map do |s|
+      value = s.is_a?(Array) ? s.first : s
+      (value / 3600.0).round(1)
+    end
     @total_error_month = calc_task_time_error(@tasks_month)
   end
 
@@ -44,6 +48,10 @@ class ReportsController < ApplicationController
     end
     @completation_rate_year = calc_completation_rate(@tasks_year)
     @total_time_year = calc_total_time(@tasks_year)
+    @total_time_year_per_month_hours = calc_total_time_year(@tasks_year).values.map do |s|
+      value = s.is_a?(Array) ? s.first : s
+      (value / 3600.0).round(1)
+    end
     @total_error_year = calc_task_time_error(@tasks_year)
   end
 
@@ -99,6 +107,61 @@ class ReportsController < ApplicationController
       end
       # 集計結果のハッシュを返す
       weekly_totals
+    end
+    def calc_total_time_month(tasks)
+      # 月の週ごとの合計時間を格納するハッシュ（多くの月が5週にまたがるため第5週まで用意）
+      monthly_totals = {
+        "第1週" => 0.0, "第2週" => 0.0, "第3週" => 0.0, "第4週" => 0.0, "第5週" => 0.0
+      }
+
+      tasks.each do |task|
+        # 開始・終了時刻がないタスクはスキップ
+        next unless task.started_at && task.finished_at
+
+        # タスクの終了日から、それが月の何日目かを取得
+        day_of_month = task.finished_at.day
+
+        # 日付から、その月における週番号を計算
+        # (例: 1日～7日 → 1週目, 8日～14日 → 2週目...)
+        week_number = (day_of_month - 1) / 7 + 1
+
+        # 対応する週のキーを作成 (例: "第1週")
+        week_key = "第#{week_number}週"
+
+        # 計算した時間を対応する週に加算
+        duration = task.finished_at - task.started_at
+        # 存在しない週のキー（例: 第6週）へのアクセスを防ぐ
+        monthly_totals[week_key] += duration if monthly_totals.key?(week_key)
+      end
+
+      # 集計結果のハッシュを返す
+      monthly_totals
+    end
+    def calc_total_time_year(tasks)
+      # 1年を月ごとに集計するためのハッシュを初期化
+      yearly_totals = {
+        "1月" => 0.0, "2月" => 0.0, "3月" => 0.0, "4月" => 0.0,
+        "5月" => 0.0, "6月" => 0.0, "7月" => 0.0, "8月" => 0.0,
+        "9月" => 0.0, "10月" => 0.0, "11月" => 0.0, "12月" => 0.0
+      }
+
+      tasks.each do |task|
+        # 開始・終了時刻がないタスクはスキップ
+        next unless task.started_at && task.finished_at
+
+        # タスクの終了日から「月」を取得 (1～12の数値が返る)
+        month_number = task.finished_at.month
+
+        # 対応する月のキーを作成 (例: "1月")
+        month_key = "#{month_number}月"
+
+        # 計算した時間を対応する月に加算
+        duration = task.finished_at - task.started_at
+        yearly_totals[month_key] += duration
+      end
+
+      # 集計結果のハッシュを返す
+      yearly_totals
     end
     def calc_task_time_error(tasks)
       tasks.sum do |task|

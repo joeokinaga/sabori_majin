@@ -113,14 +113,14 @@ document.addEventListener("turbo:load", function() {
         }
       }
     },
-    {
+	{
 		id: 'myChart3',
 		type: 'bar',
 		data: {
-			labels: ["総学習時間(h)"],
+			labels: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
 			datasets: [{
 			label: "総学習時間(h)",
-			data: [<%= (@total_time_all / 3600.0).round(1) %>],
+			data: <%= @total_time_year_per_month_hours %>,
 			backgroundColor: 'rgba(54, 162, 235, 0.5)',
 			borderColor: 'rgba(54, 162, 235, 1)',
 			borderWidth: 1
@@ -128,8 +128,8 @@ document.addEventListener("turbo:load", function() {
 		},
 		options: {
 			scales: {
-			y: { min: 0, max: 100, beginAtZero: true }
-			}
+			y: { beginAtZero: true }
+			}	
 		}
 		}
   ];
