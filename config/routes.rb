@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
-  get "report", to: "reports#show", as: "report"
+  resources :reports, only: [] do
+    collection do
+      get :daily
+      get :weekly
+      get :monthly
+      get :yearly
+      get :all
+    end
+  end
   devise_for :users
   root 'tasks#index'
   resources :tasks do
@@ -9,6 +17,7 @@ Rails.application.routes.draw do
       patch :finish
     end
   end
+  resources :users, only: %i[show]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
