@@ -5,8 +5,8 @@ class TasksController < ApplicationController
       # @tasks = current_user.tasks.where(planned_start_at: Date.current.all_day).order(planned_start_at: :asc)
       @tasks = current_user.tasks
                            .where(planned_start_at: Date.current.all_day)
-                           .where('planned_finish_at > ?', Time.zone.now)
                            .order(planned_start_at: :asc)
+                          #  .where('planned_finish_at > ?', Time.zone.now)
     end
 
     def show
