@@ -62,9 +62,6 @@
                         <p class="mb-0"><strong>実終了:</strong> <%= task.finished_at ? task.finished_at.strftime("%Y-%m-%d %H:%M") : "-" %></p>
                     </div>
                     <% end %>
-                    <% if @tasks_today.empty? %>
-                    <p>タスクはありません。</p>
-                    <% end %>
                 </div>
             </div>
         </div>
@@ -79,7 +76,7 @@ document.addEventListener("turbo:load", function() {
       id: 'myChart1',
       type: 'bar',
       data: {
-        labels: [" <%= @tasks_today.first.planned_start_at %> "],
+        labels: ["<%= @tasks_today.empty? ? "今日のタスクがありません" : @tasks_today.first.planned_start_at.strftime("%Y-%m-%d") %>"],
         datasets: [{
           label: '達成率 (%)',
           data: <%= [@completation_rate_today].to_json %>,
@@ -98,10 +95,10 @@ document.addEventListener("turbo:load", function() {
       id: 'myChart2',
       type: 'bar',
       data: {
-        labels: [" <%= @tasks_today.first.planned_start_at %> "],
+        labels: ["<%= @tasks_today.empty? ? "今日のタスクがありません" : @tasks_today.first.planned_start_at.strftime("%Y-%m-%d") %>"],
         datasets: [{
           label: "誤差時間合計(h)",
-          data: [<%= ((@total_error_today || 0) / 3600.0).round(1) %>],
+          data: [<%= (@total_error_today / 3600.0).round(1) %>],
           backgroundColor: 'rgba(54, 162, 235, 0.5)',
           borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1
@@ -109,29 +106,29 @@ document.addEventListener("turbo:load", function() {
       },
       options: {
         scales: {
-          y: { min: 0, beginAtZero: true }
+          y: { min: 0, max: 100,  beginAtZero: true }
         }
       }
     },
     {
-      id: 'myChart3',
-      type: 'bar',
-      data: {
-        labels: [" <%= @tasks_today.first.planned_start_at %> "],
-        datasets: [{
-          label: "合計時間(h)",
-          data: [<%= ((@total_time_today || 0) / 3600.0).round(1) %>],
-          backgroundColor: 'rgba(54, 162, 235, 0.5)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: { min: 0, beginAtZero: true }
-        }
-      }
-    }
+		id: 'myChart3',
+		type: 'bar',
+		data: {
+			labels: ["総学習時間(h)"],
+			datasets: [{
+			label: "総学習時間(h)",
+			data: [<%= (@total_time_today / 3600.0).round(1) %>],
+			backgroundColor: 'rgba(54, 162, 235, 0.5)',
+			borderColor: 'rgba(54, 162, 235, 1)',
+			borderWidth: 1
+			}]
+		},
+		options: {
+			scales: {
+			y: { min: 0, max: 100, beginAtZero: true }
+			}
+		}
+		}
   ];
 
   charts.forEach(c => {

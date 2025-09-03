@@ -1,6 +1,6 @@
 <div class="container-fluid mt-5">
     <div class="text-center">
-        <h1>Daily report</h1>
+        <h1>All report</h1>
         <%= link_to "Daily", daily_reports_path, class: "btn #{current_page?(daily_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
         <%= link_to "Weekly", weekly_reports_path, class: "btn #{current_page?(weekly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
         <%= link_to "Monthly", monthly_reports_path, class: "btn #{current_page?(monthly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
@@ -11,7 +11,7 @@
         <!-- 達成率 -->
         <div class="col-md-4">
             <h2 class=" mt-4">達成率 (%)</h2>
-            <canvas id="myChart"></canvas>
+            <canvas id="myChart1"></canvas>
             <table class="table table-striped">
                 <tbody>
                     <td>
@@ -21,6 +21,7 @@
             </table>
             <!-- 合計誤差 -->
             <h2 class="mt-5">誤差合計</h2>
+			<canvas id="myChart2"></canvas>
             <table class="table table-striped">
                 <tbody>
                     <td>
@@ -33,6 +34,7 @@
         <!-- 合計学習時間 -->
         <div class="col-md-4">
             <h2 class="mt-5">総学習時間</h2>
+			<canvas id="myChart3"></canvas>
             <table class="table table-striped">
                 <tbody>
                     <tr>
@@ -70,27 +72,82 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    document.addEventListener("turbo:load", function() {
-        const ctx = document.getElementById('myChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['日', '月', '火', '水', '木', '金', '土'],
-                datasets: [{
-                    label: '達成率 (%)',
-                    data: [12, 19, 3, 5, 2, 3, 7], // ← ダミーデータ
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+document.addEventListener("turbo:load", function() {
+
+  const charts = [
+    {
+      id: 'myChart1',
+      type: 'bar',
+      data: {
+        labels: ["<%= @tasks_all.empty? ? "今日のタスクがありません" : @tasks_all.first.planned_start_at.strftime("%Y-%m-%d") %>"],
+        datasets: [{
+          label: '達成率 (%)',
+          data: <%= [@completation_rate_all].to_json %>,
+          backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: { min: 0, max: 100, beginAtZero: true }
+        }
+      }
+    },
+    {
+      id: 'myChart2',
+      type: 'bar',
+      data: {
+        labels: ["<%= @tasks_all.empty? ? "今日のタスクがありません" : @tasks_all.first.planned_start_at.strftime("%Y-%m-%d") %>"],
+        datasets: [{
+          label: "誤差時間合計(h)",
+          data: [<%= (@total_error_all / 3600.0).round(1) %>],
+          backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: { min: 0, max: 100,  beginAtZero: true }
+        }
+      }
+    },
+    {
+		id: 'myChart3',
+		type: 'bar',
+		data: {
+			labels: ["総学習時間(h)"],
+			datasets: [{
+			label: "総学習時間(h)",
+			data: [<%= (@total_time_all / 3600.0).round(1) %>],
+			backgroundColor: 'rgba(54, 162, 235, 0.5)',
+			borderColor: 'rgba(54, 162, 235, 1)',
+			borderWidth: 1
+			}]
+		},
+		options: {
+			scales: {
+			y: { min: 0, max: 100, beginAtZero: true }
+			}
+		}
+		}
+  ];
+
+  charts.forEach(c => {
+    const ctx = document.getElementById(c.id);
+    if (!ctx) return;
+
+    // 既存のグラフを破棄
+    if (ctx.chart) ctx.chart.destroy();
+
+    // 新しいグラフを作成
+    ctx.chart = new Chart(ctx.getContext('2d'), {
+      type: c.type,
+      data: c.data,
+      options: c.options
     });
+  });
+
+});
 </script>
