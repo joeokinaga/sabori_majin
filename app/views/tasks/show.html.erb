@@ -1,0 +1,67 @@
+<div class="container py-5" style="max-width:700px;">
+  <h1 class="text-center fw-bold mb-5" style="font-size:3rem;"><%= @task.title %></h1>
+  <% if @task.content.present? %>
+    <h2 class="text-center fw-bold mb-5" style="font-size:2.2rem;"><%= @task.content %></h2>
+  <% end %>
+  <%= @task.status %>
+  <% case @task.status.to_sym
+     when :unstarted %>
+    <!-- 未開始画面 -->
+    <div class="d-flex justify-content-center mt-5">
+      <%= button_to "開始", start_task_path(@task), method: :patch, class: "border px-5 py-3 bg-white", style: "font-size:1.5rem;" %>
+    </div>
+
+  <% when :working %>
+    <!-- 作業中画面（タイマー＋諦める・終了ボタン） -->
+    <div class="text-center my-5" style="font-size:2rem;">
+      <span class="fw-bold" style="font-size:1.5rem;">予定終了時刻まであと </span>
+      <span id="countdown" class="fw-bold" style="font-size:2.3rem;">00:00</span>
+    </div>
+    <div class="d-flex justify-content-center gap-5 mt-4">
+      <%= button_to "諦める", give_up_task_path(@task), method: :patch, class: "border px-5 py-3 bg-white", style: "font-size:1.5rem;" %>
+      <%= button_to "終了", finish_task_path(@task), method: :patch, class: "border px-5 py-3 bg-white", style: "font-size:1.5rem;" %>
+    </div>
+    <script data-turbo-eval="true">
+      document.addEventListener("turbo:load", function() {
+        // planned_finish_at を UNIXタイムで取得
+        // var finishTime = <%= @task.planned_finish_at.to_i %>;
+        var finishTime = <%= @task.planned_finish_at.in_time_zone('Asia/Tokyo').to_i %>;
+        console.log("finishTime:", finishTime);           
+
+        function updateCountdown() {
+          var now = Math.floor(Date.now() / 1000);
+          var left = finishTime - now;
+          if (left < 0) left = 0;
+          var min = Math.floor(left / 60);
+          var sec = left % 60;
+              var countdownElem = document.getElementById("countdown");
+              if (countdownElem) {
+                countdownElem.textContent =
+                ("0" + min).slice(-2) + ":" + ("0" + sec).slice(-2);
+              }
+        }
+        updateCountdown();
+        // setInterval(updateCountdown, 1000);
+            // 前のintervalをクリアして新しいものだけ動かす
+        window.countdownIntervalId && clearInterval(window.countdownIntervalId);
+        window.countdownIntervalId = setInterval(updateCountdown, 1000);
+      });
+    </script>
+
+  <% when :stopped %>
+    <!-- 諦めた・中断画面 -->
+    <div class="text-center my-5" style="font-size:2rem;">
+      <span class="fw-bold text-danger">このタスクは諦めました。</span>
+    </div>
+
+  <% when :done %>
+    <!-- 完了画面 -->
+    <div class="text-center my-5" style="font-size:2rem;">
+      <span class="fw-bold text-success">タスク完了！お疲れ様でした。</span>
+    </div>
+  <% end %>
+</div>
+
+
+
+

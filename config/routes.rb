@@ -9,8 +9,14 @@ Rails.application.routes.draw do
     end
   end
   devise_for :users
-  resources :tasks
-  root "tasks#index"
+  root 'tasks#index'
+  resources :tasks do
+    member do
+      patch :start
+      patch :give_up
+      patch :finish
+    end
+  end
   resources :users, only: %i[show]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

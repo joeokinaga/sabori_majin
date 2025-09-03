@@ -30,7 +30,10 @@
 
 
  <body>
-   <%= render 'layouts/header' %>
+
+   <% if @task.nil? || @task.status != "working" %>
+    <%= render 'layouts/header' %>
+   <% end %>
    <div class="container">
     <% flash.each do |message_type, message| %>
       <% if message_type == "notice" %>
