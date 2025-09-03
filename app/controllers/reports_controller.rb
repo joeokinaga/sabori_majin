@@ -7,7 +7,7 @@ class ReportsController < ApplicationController
     if @tasks_today.empty?
       redirect_to new_task_path, notice: "今日のタスクを登録しろぼけなす"
     end
-    @completation_rate_today = calc_completation_rate(@tasks_today)
+    @completion_rate_today = calc_completion_rate(@tasks_today)
     @total_time_today = calc_total_time(@tasks_today)
     @total_error_today = calc_task_time_error(@tasks_today)
     @total_planned_working_time = calc_planned_working_time(@tasks_today)
@@ -18,7 +18,7 @@ class ReportsController < ApplicationController
     if @tasks_week.empty?
       redirect_to new_task_path, notice: "今週のタスクを登録しろぼけなす"
     end
-    @completation_rate_week = calc_completation_rate(@tasks_week)
+    @completion_rate_week = calc_completion_rate(@tasks_week)
     @total_time_week = calc_total_time(@tasks_week)
     @total_time_week_per_day_hours = calc_total_time_week(@tasks_week).values.map do |s|
       value = s.is_a?(Array) ? s.first : s
@@ -32,7 +32,7 @@ class ReportsController < ApplicationController
     if @tasks_month.empty?
       redirect_to new_task_path, notice: "今月のタスクを登録しろぼけなす"
     end
-    @completation_rate_month = calc_completation_rate(@tasks_month)
+    @completion_rate_month = calc_completion_rate(@tasks_month)
     @total_time_month = calc_total_time(@tasks_month)
     @total_time_month_per_week_hours = calc_total_time_month(@tasks_month).values.map do |s|
       value = s.is_a?(Array) ? s.first : s
@@ -46,7 +46,7 @@ class ReportsController < ApplicationController
     if @tasks_year.empty?
       redirect_to new_task_path, notice: "今年のタスクを登録しろぼけなす"
     end
-    @completation_rate_year = calc_completation_rate(@tasks_year)
+    @completion_rate_year = calc_completion_rate(@tasks_year)
     @total_time_year = calc_total_time(@tasks_year)
     @total_time_year_per_month_hours = calc_total_time_year(@tasks_year).values.map do |s|
       value = s.is_a?(Array) ? s.first : s
@@ -60,7 +60,7 @@ class ReportsController < ApplicationController
     if @tasks_all.empty?
       redirect_to new_task_path, notice: "タスクを登録しろぼけなす"
     end
-    @completation_rate_all = calc_completation_rate(@tasks_all)
+    @completion_rate_all = calc_completion_rate(@tasks_all)
     @total_time_all = calc_total_time(@tasks_all)
     @total_error_all = calc_task_time_error(@tasks_all)
   end
@@ -70,7 +70,7 @@ class ReportsController < ApplicationController
       @user_tasks = (current_user || User.first).tasks
     end
 
-    def calc_completation_rate(tasks)
+    def calc_completion_rate(tasks)
       total = tasks.count
       return 0 if total.zero?
       completed = tasks.where(status: :done).count

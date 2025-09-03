@@ -17,7 +17,7 @@
 					<tr>
 						<th>達成率総計(%)</th>
                     <td>
-                        <%= @completation_rate_all %>
+                        <%= @completion_rate_all %>
                     </td>
 					</tr>
                 </tbody>
@@ -80,24 +80,32 @@ document.addEventListener("turbo:load", function() {
 
   const charts = [
     {
-      id: 'myChart1',
-      type: 'bar',
-      data: {
-        labels: ["<%= @tasks_all.empty? ? "今日のタスクがありません" : @tasks_all.first.planned_start_at.strftime("%Y-%m-%d") %>"],
-        datasets: [{
-          label: '達成率 (%)',
-          data: <%= [@completation_rate_all].to_json %>,
-          backgroundColor: 'rgba(54, 162, 235, 0.5)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: { min: 0, max: 100, beginAtZero: true }
-        }
+		id: 'myChart1',
+		// 1. グラフの種類を 'pie' に変更
+		type: 'pie',
+		data: {
+			// 2. ラベルを各データに対応させる（例：「達成」「未達成」）
+			labels: ['達成', '未達成'],
+			datasets: [{
+			label: '達成率 (%)',
+			// 3. データを配列で渡す（達成率と未達成率）
+			data: <%= [(@completion_rate_all || 0), 100 - (@completion_rate_all || 0)] %>,
+			// 4. 各データの色を配列で指定
+			backgroundColor: [
+				'rgba(54, 162, 235, 0.5)', // 達成部分の色
+				'rgba(255, 99, 132, 0.5)'  // 未達成部分の色
+			],
+			borderColor: [
+				'rgba(54, 162, 235, 1)',
+				'rgba(255, 99, 132, 1)'
+			],
+			borderWidth: 1
+			}]
+		},
+		options: {
+			aspectRatio: 2
       }
-    },
+	},
     {
       id: 'myChart2',
       type: 'bar',
