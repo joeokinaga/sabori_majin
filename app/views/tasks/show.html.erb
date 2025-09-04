@@ -3,12 +3,23 @@
   <% if @task.content.present? %>
     <h2 class="text-center fw-bold mb-5" style="font-size:2.2rem;"><%= @task.content %></h2>
   <% end %>
-  <%= @task.status %>
+  <% now = Time.current.in_time_zone('Asia/Tokyo') %>
+  <% today = now.to_date %>
   <% case @task.status.to_sym
-     when :unstarted %>
+    when :unstarted %>
     <!-- 未開始画面 -->
     <div class="d-flex justify-content-center mt-5">
-      <%= button_to "開始", start_task_path(@task), method: :patch, class: "border px-5 py-3 bg-white", style: "font-size:1.5rem;" %>
+      <% if @task.planned_start_at.to_date == today && now <= @task.planned_finish_at %>
+        <%= button_to "開始", start_task_path(@task), method: :patch, class: "border px-5 py-3 bg-white", style: "font-size:1.5rem;" %>
+      <% elsif @task.planned_start_at.to_date > today %>
+        <div class="text-center my-5" style="font-size:2rem;">
+          <span class="fw-bold text-danger">このタスクは明日以降のためまだ開始できません</span>
+        </div>
+      <% else %>
+        <div class="text-center my-5" style="font-size:2rem;">
+          <span class="fw-bold text-danger">開始時間をオーバーしました。</span>
+        </div>
+      <% end %>
     </div>
 
   <% when :working %>
@@ -34,11 +45,12 @@
           if (left < 0) left = 0;
           var min = Math.floor(left / 60);
           var sec = left % 60;
-              var countdownElem = document.getElementById("countdown");
-              if (countdownElem) {
-                countdownElem.textContent =
-                ("0" + min).slice(-2) + ":" + ("0" + sec).slice(-2);
-              }
+          var countdownElem = document.getElementById("countdown");
+          if (countdownElem) {
+            // 分はゼロ埋めしない、秒だけゼロ埋め
+            countdownElem.textContent =
+              min + ":" + ("0" + sec).slice(-2);
+          }
         }
         updateCountdown();
         // setInterval(updateCountdown, 1000);
@@ -62,6 +74,7 @@
   <% end %>
 </div>
 
-
-
+<div class="mt-4 text-center">
+  <%= link_to "戻る", request.referer, class: "border px-5 py-3 bg-white text-black", style: "font-size:1rem; text-decoration:none;" %>
+</div>
 
