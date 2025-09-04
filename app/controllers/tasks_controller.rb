@@ -89,13 +89,13 @@ class TasksController < ApplicationController
     def give_up
       @task = current_user.tasks.find(params[:id])
       @task.stopped!
-      redirect_to @task
+      redirect_to tasks_path, alert: "タスクを中断しました"
     end
     
     def finish
       @task = current_user.tasks.find(params[:id])
       @task.done!
-      redirect_to @task
+      redirect_to tasks_path, notice: "タスクを終了しました"
     end
 
     private
