@@ -1,4 +1,15 @@
-<% @all_users.each do |user| %>
-    <p><%= user.name %> <%= user.lazy_score %></p>
+<%= form_with url: ranking_path(current_user), method: :get, local: true, id: "period_form" do %>
+  <%= hidden_field_tag :period, params[:period] || "1day", id: "period_input" %>
+
+  <%= button_tag "1日", type: "submit", name: "period", value: "1day", class: "period-button" %>
+  <%= button_tag "1週間", type: "submit", name: "period", value: "1week", class: "period-button" %>
+  <%= button_tag "1か月", type: "submit", name: "period", value: "1month", class: "period-button" %>
+  <%= button_tag "1年", type: "submit", name: "period", value: "1year", class: "period-button" %>
+  <%= button_tag "全期間", type: "submit", name: "period", value: "all", class: "period-button" %>
 <% end %>
-    
+
+<p>あなたは <%= @user_rank %>位です</p>
+
+<% @all_users_with_rank.each do |ur| %>
+    <p>順位: <%= ur[:rank] %>   名前: <%= ur[:user].name %> スコア: <%= ur[:user].lazy_score %></p>
+<% end %>
