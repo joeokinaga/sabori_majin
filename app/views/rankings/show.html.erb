@@ -1,0 +1,55 @@
+<div class="container mt-5">
+    <div class="text-center">
+      <h1 class="display-3 fw-bold text-gradient mb-4">
+        🎊 サボりランキング 🎊
+      </h1>
+  
+      <%= form_with url: ranking_path(current_user), method: :get, local: true, id: "period_form" do %>
+        <div class="d-flex justify-content-center mb-4">
+            <%= button_tag "1日",     type: "submit", name: "period", value: "1day",   class: "btn btn-primary btn-lg fw-bold me-2" %>
+            <%= button_tag "1週間",   type: "submit", name: "period", value: "1week",  class: "btn btn-primary btn-lg fw-bold me-2" %>
+            <%= button_tag "1か月",   type: "submit", name: "period", value: "1month", class: "btn btn-primary btn-lg fw-bold me-2" %>
+            <%= button_tag "1年",     type: "submit", name: "period", value: "1year",  class: "btn btn-primary btn-lg fw-bold me-2" %>
+            <%= button_tag "全期間", type: "submit", name: "period", value: "all",    class: "btn btn-primary btn-lg fw-bold" %>
+        </div>
+      <% end %>
+    
+  
+      <h3 class="m-5 fw-bold fs-2">
+        あなたは <span class="display-5 fw-bold"><%= @user_rank %> 位 </span>です
+      </h3>
+    </div>
+  
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-9">
+        <table class="table table-hover table-bordered shadow-lg text-center align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">順位</th>
+              <th scope="col">ユーザー名</th>
+              <th scope="col">サボりスコア</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @all_users_with_rank.each do |ur| %>
+              <% row_class = case ur[:rank]
+                when 1 then "table-warning fw-bold text-danger fs-4"
+                when 2 then "table-secondary fw-bold fs-4"
+                when 3 then "table-warning fw-bold text-brown fs-4"
+                else ""
+              end %>
+  
+              <tr class="<%= row_class %> <%= 'table-success fw-bold' if ur[:user] == current_user %>">
+                <td>
+                  <% if ur[:rank] == 1 %> 🥇 1位 <% elsif ur[:rank] == 2 %> 🥈 2位 <% elsif ur[:rank] == 3 %> 🥉 3位 <% else %> <%= ur[:rank] %> 位 <% end %>
+                </td>
+                <td><%= ur[:user].name %></td>
+                <td><%= ur[:user].lazy_score %> pt</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
