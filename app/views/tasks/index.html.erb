@@ -33,16 +33,6 @@
         <div class="card-body px-4 py-3">
           <div class="d-flex justify-content-between align-items-center" style="font-size:1.35rem;">
             <%= link_to task.title, task_path(task), class: "text-dark", style: "text-decoration:none;" %>
-            <% if is_black %>
-              <span>
-                <%= link_to task_path(task), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, class: "text-decoration-none" do %>
-                  🗑️
-                <% end %>
-                <%= link_to edit_task_path(task), class: "ms-2 text-dark text-decoration-none", style: "font-size:1.2em;", title: "編集" do %>
-                  ✏️
-                <% end %>
-              </span>
-            <% end %>
           </div>
           <div class="text-center mt-2" style="font-size:1.1rem;">
             <%= "#{task.planned_start_at.strftime('%H:%M')}〜#{task.planned_finish_at.strftime('%H:%M')}" %>

@@ -3,7 +3,6 @@
   <% if @task.content.present? %>
     <h2 class="text-center fw-bold mb-5" style="font-size:2.2rem;"><%= @task.content %></h2>
   <% end %>
-  <%= @task.status %>
   <% now = Time.current.in_time_zone('Asia/Tokyo') %>
   <% today = now.to_date %>
   <% case @task.status.to_sym
@@ -75,6 +74,17 @@
   <% end %>
 </div>
 
+<div class="mt-4 text-center">
+  <% if !@task.working? %>
+    <% link_text =
+        if @task.unstarted? && @task.planned_finish_at.future?
+          "キャンセル"
+        else
+          "戻る"
+        end
+    %>
 
-
+    <%= link_to link_text, root_path, class: "border px-5 py-3 bg-white text-black", style: "font-size:1rem; text-decoration:none;" %>
+  <% end %>
+</div>
 
