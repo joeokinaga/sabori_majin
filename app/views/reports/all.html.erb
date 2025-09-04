@@ -14,9 +14,12 @@
             <canvas id="myChart1"></canvas>
             <table class="table table-striped">
                 <tbody>
+					<tr>
+						<th>達成率総計(%)</th>
                     <td>
-                        <%= @completation_rate_all %>
+                        <%= @completion_rate_all %>
                     </td>
+					</tr>
                 </tbody>
             </table>
             <!-- 合計誤差 -->
@@ -33,11 +36,12 @@
         </div>
         <!-- 合計学習時間 -->
         <div class="col-md-4">
-            <h2 class="mt-5">総学習時間</h2>
+            <h2 class="mt-5">月別合計時間(h)</h2>
 			<canvas id="myChart3"></canvas>
             <table class="table table-striped">
                 <tbody>
                     <tr>
+						<th>合計時間(h)</th>
                         <td>
                             <%= (@total_time_all / 3600).floor %>時間
                             <%= ((@total_time_all % 3600) / 60).floor %>分
@@ -76,24 +80,32 @@ document.addEventListener("turbo:load", function() {
 
   const charts = [
     {
-      id: 'myChart1',
-      type: 'bar',
-      data: {
-        labels: ["<%= @tasks_all.empty? ? "今日のタスクがありません" : @tasks_all.first.planned_start_at.strftime("%Y-%m-%d") %>"],
-        datasets: [{
-          label: '達成率 (%)',
-          data: <%= [@completation_rate_all].to_json %>,
-          backgroundColor: 'rgba(54, 162, 235, 0.5)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: { min: 0, max: 100, beginAtZero: true }
-        }
+		id: 'myChart1',
+		// 1. グラフの種類を 'pie' に変更
+		type: 'pie',
+		data: {
+			// 2. ラベルを各データに対応させる（例：「達成」「未達成」）
+			labels: ['達成', '未達成'],
+			datasets: [{
+			label: '達成率 (%)',
+			// 3. データを配列で渡す（達成率と未達成率）
+			data: <%= [(@completion_rate_all || 0), 100 - (@completion_rate_all || 0)] %>,
+			// 4. 各データの色を配列で指定
+			backgroundColor: [
+				'rgba(54, 162, 235, 0.5)', // 達成部分の色
+				'rgba(255, 99, 132, 0.5)'  // 未達成部分の色
+			],
+			borderColor: [
+				'rgba(54, 162, 235, 1)',
+				'rgba(255, 99, 132, 1)'
+			],
+			borderWidth: 1
+			}]
+		},
+		options: {
+			aspectRatio: 2
       }
-    },
+	},
     {
       id: 'myChart2',
       type: 'bar',
@@ -113,14 +125,14 @@ document.addEventListener("turbo:load", function() {
         }
       }
     },
-    {
+	{
 		id: 'myChart3',
 		type: 'bar',
 		data: {
-			labels: ["総学習時間(h)"],
+			labels: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
 			datasets: [{
-			label: "総学習時間(h)",
-			data: [<%= (@total_time_all / 3600.0).round(1) %>],
+			label: "合計時間(h)",
+			data: <%= @total_time_year_per_month_hours %>,
 			backgroundColor: 'rgba(54, 162, 235, 0.5)',
 			borderColor: 'rgba(54, 162, 235, 1)',
 			borderWidth: 1
@@ -128,8 +140,8 @@ document.addEventListener("turbo:load", function() {
 		},
 		options: {
 			scales: {
-			y: { min: 0, max: 100, beginAtZero: true }
-			}
+			y: { beginAtZero: true }
+			}	
 		}
 		}
   ];
