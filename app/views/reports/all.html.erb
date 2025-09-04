@@ -23,7 +23,9 @@
                 </tbody>
             </table>
             <h2 class="mt-5">タスクのステータス</h2>
+			<div style="height: 250px; width: 250px;">
 			<canvas id="myChart4"></canvas>
+			</div>
         </div>
         <!-- 合計学習時間 -->
         <div class="col-md-4">
@@ -183,11 +185,15 @@ document.addEventListener("turbo:load", function() {
 				]
 			},
 			options: {
-				scales: {
+			responsive: true,
+			maintainAspectRatio: false, // デフォルトの比率を無視
+			aspectRatio: 1,             // 正方形にする（1:1）
+			scales: {
 				x: { stacked: true },
 				y: { stacked: true, beginAtZero: true }
-				}
 			}
+			
+	}
 	}
   ];
 
