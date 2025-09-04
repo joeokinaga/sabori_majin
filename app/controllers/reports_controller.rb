@@ -5,7 +5,7 @@ class ReportsController < ApplicationController
   def daily
     @tasks_today = @user_tasks.where(planned_start_at: Date.today.all_day)
     if @tasks_today.empty?
-      redirect_to new_task_path, notice: "今日のタスクを登録しろぼけなす"
+      redirect_to new_task_path, notice: "今日のタスクを登録してください"
     end
     @completion_rate_today = calc_completion_rate(@tasks_today)
     @total_time_today = calc_total_time(@tasks_today)
@@ -17,7 +17,7 @@ class ReportsController < ApplicationController
   def weekly
     @tasks_week  = @user_tasks.where(planned_start_at: Date.today.all_week)
     if @tasks_week.empty?
-      redirect_to new_task_path, notice: "今週のタスクを登録しろぼけなす"
+      redirect_to new_task_path, notice: "今週のタスクを登録してください"
     end
     @completion_rate_week = calc_completion_rate(@tasks_week)
     @total_time_week = calc_total_time(@tasks_week)
@@ -32,7 +32,7 @@ class ReportsController < ApplicationController
   def monthly
     @tasks_month = @user_tasks.where(planned_start_at: Date.today.all_month)
     if @tasks_month.empty?
-      redirect_to new_task_path, notice: "今月のタスクを登録しろぼけなす"
+      redirect_to new_task_path, notice: "今月のタスクを登録してください"
     end
     @completion_rate_month = calc_completion_rate(@tasks_month)
     @total_time_month = calc_total_time(@tasks_month)
@@ -47,7 +47,7 @@ class ReportsController < ApplicationController
   def yearly
     @tasks_year  = @user_tasks.where(planned_start_at: Date.today.all_year)
     if @tasks_year.empty?
-      redirect_to new_task_path, notice: "今年のタスクを登録しろぼけなす"
+      redirect_to new_task_path, notice: "今年のタスクを登録してください"
     end
     @completion_rate_year = calc_completion_rate(@tasks_year)
     @total_time_year = calc_total_time(@tasks_year)
@@ -62,7 +62,7 @@ class ReportsController < ApplicationController
   def all
     @tasks_all   = @user_tasks
     if @tasks_all.empty?
-      redirect_to new_task_path, notice: "タスクを登録しろぼけなす"
+      redirect_to new_task_path, notice: "タスクを登録してください"
     end
     @completion_rate_all = calc_completion_rate(@tasks_all)
     @total_time_all = calc_total_time(@tasks_all)
