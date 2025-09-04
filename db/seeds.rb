@@ -118,4 +118,58 @@ Task.create!(
   user_id: user.id
 )
 
+
+
+# --- ユーザー作成 ---
+users = [
+  { name: "Alice",   email: "alice@example.com",   password: "password" },
+  { name: "Bob",     email: "bob@example.com",     password: "password" },
+  { name: "Charlie", email: "charlie@example.com", password: "password" }
+]
+
+users.each do |attrs|
+  User.find_or_create_by!(email: attrs[:email]) do |user|
+    user.name     = attrs[:name]
+    user.password = attrs[:password]
+  end
+end
+
+# ユーザー取得
+alice   = User.find_by(email: "alice@example.com")
+bob     = User.find_by(email: "bob@example.com")
+charlie = User.find_by(email: "charlie@example.com")
+
+# --- 確認用タスク作成（enumに合わせる） ---
+
+# Alice → 遅刻して開始、途中で止めた
+alice.tasks.create!(
+  title: "Aliceの停止タスク",
+  content: "テスト用タスク",
+  status: :stopped,   # Enumにある値
+  planned_start_at: now - 5.hours,
+  planned_finish_at: now - 4.hours + 30.minutes,
+  started_at: now - 4.hours + 10.minutes,
+  finished_at: now - 4.hours + 25.minutes
+)
+
+# Bob → 予定通り開始、早く終わった
+bob.tasks.create!(
+  title: "Bobの完了タスク",
+  content: "テスト用タスク",
+  status: :done,      # Enumに合わせて :done に変更
+  planned_start_at: now - 3.hours,
+  planned_finish_at: now - 2.hours + 30.minutes,
+  started_at: now - 3.hours,
+  finished_at: now - 2.hours
+)
+
+# Charlie → 未開始
+charlie.tasks.create!(
+  title: "Charlieの未開始タスク",
+  content: "テスト用タスク",
+  status: :unstarted, # Enumにある値
+  planned_start_at: now - 2.hours,
+  planned_finish_at: now - 1.hours + 50.minutes
+)
+
 puts "Seed finished! User: #{user.email}, Tasks: #{user.tasks.count}"
