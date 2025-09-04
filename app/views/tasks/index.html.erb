@@ -3,9 +3,9 @@
   <div class="row justify-content-center align-items-start">
     <!-- 左側: 個人成績 -->
     <div class="col-md-3 d-flex justify-content-center mb-4 mb-md-0">
-      <div class="border text-center py-5 px-4" style="font-size:2rem; min-width:220px;">
+      <%= link_to all_reports_path, class: "border px-5 py-3 text-dark", style: "font-size:1.5rem; text-decoration:none;" do %>
         個人成績
-      </div>
+      <% end %>
     </div>
     <!-- 中央: タスク一覧（カード使用） -->
     <div class="col-md-6 d-flex flex-column align-items-center">
