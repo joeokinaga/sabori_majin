@@ -1,6 +1,6 @@
 <div class="container-fluid mt-5">
     <div class="text-center">
-        <h1>All report</h1>
+        <h1>All Reports</h1>
         <%= link_to "Daily", daily_reports_path, class: "btn #{current_page?(daily_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
         <%= link_to "Weekly", weekly_reports_path, class: "btn #{current_page?(weekly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
         <%= link_to "Monthly", monthly_reports_path, class: "btn #{current_page?(monthly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
@@ -8,55 +8,35 @@
         <%= link_to "All", all_reports_path, class: "btn #{current_page?(all_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
     </div>
     <div class="row align-items-baseline">
-        <!-- 達成率 -->
-        <div class="col-md-4">
-            <h2 class=" mt-4">達成率 (%)</h2>
+        <div class="col-md-3 text-center">
+            <h4 class="mt-5">総計時間(h)</h4>
+             <!-- Note: This chart might show data per year, or be removed -->
+            <canvas id="myChart3"></canvas>
+            <p class="h5 mt-3">
+                計: <%= (@total_time_all / 3600).floor %> 時間 <%= ((@total_time_all % 3600) / 60).floor %>分
+            </p>
+
+            <h4 class="mt-5">タスクのステータス</h4>
+            <div style="height: 250px; width: 250px; margin: auto;">
+                <canvas id="myChart4"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-6 d-flex flex-column align-items-center align-self-center">
+            <h2 class="mt-4">達成率 (%)</h2>
             <canvas id="myChart1"></canvas>
-            <table class="table table-striped">
-                <tbody>
-					<tr>
-						<th>達成率総計(%)</th>
-                    <td>
-                        <%= @completion_rate_all %>
-                    </td>
-					</tr>
-                </tbody>
-            </table>
-            <h2 class="mt-5">タスクのステータス</h2>
-			<div style="height: 250px; width: 250px;">
-			<canvas id="myChart4"></canvas>
-			</div>
+            <ul class="list-group mt-3" style="max-width: 300px;">
+                <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
+                    達成率:
+                    <span class=" fs-6">
+                        <%= @completion_rate_all %> %
+                    </span>
+                </li>
+            </ul>
         </div>
-        <!-- 合計学習時間 -->
-        <div class="col-md-4">
-            <h2 class="mt-5">月別合計時間(h)</h2>
-			<canvas id="myChart3"></canvas>
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-						<th>合計時間(h)</th>
-                        <td>
-                            <%= (@total_time_all / 3600).floor %>時間
-                            <%= ((@total_time_all % 3600) / 60).floor %>分
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-			<!-- 合計誤差 -->
-            <h2 class="mt-5">誤差合計</h2>
-			<canvas id="myChart2"></canvas>
-            <table class="table table-striped">
-                <tbody>
-                    <td>
-                        <%= (@total_error_all / 3600).floor %>時間
-                        <%= ((@total_error_all % 3600) / 60).floor %>分
-                    </td>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-md-4">
-            <h2>タスク一覧</h2>
-            <!-- スクロール可能なカード -->
+
+        <div class="col-md-3">
+            <h4>タスク一覧</h4>
             <div class="card mt-4" style="max-height: 400px; overflow-y: auto;">
                 <div class="card-body">
                     <% @tasks_all.each do |task| %>
@@ -70,14 +50,12 @@
                         <p class="mb-0"><strong>実終了:</strong> <%= task.finished_at ? task.finished_at.strftime("%Y-%m-%d %H:%M") : "-" %></p>
                     </div>
                     <% end %>
-                    <% if @tasks_all.empty? %>
-                    <p>タスクはありません。</p>
-                    <% end %>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener("turbo:load", function() {
