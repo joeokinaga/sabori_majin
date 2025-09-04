@@ -4,11 +4,18 @@
     <h2 class="text-center fw-bold mb-5" style="font-size:2.2rem;"><%= @task.content %></h2>
   <% end %>
   <%= @task.status %>
+  <% now = Time.current.in_time_zone('Asia/Tokyo') %>
   <% case @task.status.to_sym
-     when :unstarted %>
+    when :unstarted %>
     <!-- 未開始画面 -->
     <div class="d-flex justify-content-center mt-5">
-      <%= button_to "開始", start_task_path(@task), method: :patch, class: "border px-5 py-3 bg-white", style: "font-size:1.5rem;" %>
+      <% if now <= @task.planned_finish_at %>
+        <%= button_to "開始", start_task_path(@task), method: :patch, class: "border px-5 py-3 bg-white", style: "font-size:1.5rem;" %>
+      <% else %>
+        <button class="border px-5 py-3 bg-secondary text-white" style="font-size:1.5rem;" disabled>
+          開始時間切れ
+        </button>
+      <% end %>
     </div>
 
   <% when :working %>
