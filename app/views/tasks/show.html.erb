@@ -12,9 +12,9 @@
       <% if now <= @task.planned_finish_at %>
         <%= button_to "開始", start_task_path(@task), method: :patch, class: "border px-5 py-3 bg-white", style: "font-size:1.5rem;" %>
       <% else %>
-        <button class="border px-5 py-3 bg-secondary text-white" style="font-size:1.5rem;" disabled>
-          開始時間切れ
-        </button>
+        <div class="text-center my-5" style="font-size:2rem;">
+          <span class="fw-bold text-danger">開始時間をオーバーしました。</span>
+        </div>
       <% end %>
     </div>
 
