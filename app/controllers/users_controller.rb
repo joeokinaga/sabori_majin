@@ -42,6 +42,8 @@ class UsersController < ApplicationController
           end
 
           if task.started_at > task.planned_start_at + 3.minutes
+            lazy_pt += 2
+          elsif task.started_at < task.planned_start_at - 3.minutes
             lazy_pt += 1
           end
 
