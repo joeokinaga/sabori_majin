@@ -68,7 +68,9 @@ class TasksController < ApplicationController
         planned_start_at: planned_start_at,
         planned_finish_at: planned_finish_at
       ))
-        redirect_to tasks_path, notice: "タスクを更新しました"
+        # redirect_to tasks_path, notice: "タスクを更新しました"
+        # redirect_back fallback_location: tasks_path, notice: "タスクを更新しました"
+        redirect_to future_tasks_path, notice: "タスクを更新しました"
       else
         render :edit, status: :unprocessable_entity
       end
@@ -77,7 +79,9 @@ class TasksController < ApplicationController
     def destroy
       @task = current_user.tasks.find(params[:id])
       @task.destroy
-      redirect_to tasks_path, alert: "タスクを削除しました"
+      # redirect_to tasks_path, alert: "タスクを削除しました"
+      # redirect_back fallback_location: tasks_path, notice: "タスクを削除しました"
+      redirect_to future_tasks_path, alert: "タスクを削除しました"
     end
 
     def start
@@ -89,13 +93,19 @@ class TasksController < ApplicationController
     def give_up
       @task = current_user.tasks.find(params[:id])
       @task.stopped!
-      redirect_to @task
+      redirect_to tasks_path, alert: "タスクを中断しました"
     end
     
     def finish
       @task = current_user.tasks.find(params[:id])
       @task.done!
-      redirect_to @task
+      redirect_to tasks_path, notice: "タスクを終了しました"
+    end
+
+    def future
+      today = Time.current.in_time_zone('Asia/Tokyo').to_date
+      @future_tasks = Task.where("planned_start_at > ?", today.end_of_day).order(:planned_start_at)
+      @tasks_by_date = @future_tasks.group_by { |task| task.planned_start_at.to_date }
     end
 
     private

@@ -11,6 +11,7 @@ class ReportsController < ApplicationController
     @total_time_today = calc_total_time(@tasks_today)
     @total_error_today = calc_task_time_error(@tasks_today)
     @total_planned_working_time = calc_planned_working_time(@tasks_today)
+    @tasks_status_daily = count_statuses_per_day(@tasks_today)
   end
 
   def weekly
@@ -25,6 +26,7 @@ class ReportsController < ApplicationController
       (value / 3600.0).round(1)
     end
     @total_error_week = calc_task_time_error(@tasks_week)
+    @tasks_status_week = count_statuses_per_week(@tasks_week)
   end
 
   def monthly
@@ -39,6 +41,7 @@ class ReportsController < ApplicationController
       (value / 3600.0).round(1)
     end
     @total_error_month = calc_task_time_error(@tasks_month)
+    @tasks_status_month = count_statuses_month(@tasks_month)
   end
 
   def yearly
@@ -53,6 +56,7 @@ class ReportsController < ApplicationController
       (value / 3600.0).round(1)
     end
     @total_error_year = calc_task_time_error(@tasks_year)
+    @tasks_status_year = count_statuses_year(@tasks_year)
   end
 
   def all
@@ -63,6 +67,7 @@ class ReportsController < ApplicationController
     @completion_rate_all = calc_completion_rate(@tasks_all)
     @total_time_all = calc_total_time(@tasks_all)
     @total_error_all = calc_task_time_error(@tasks_all)
+    @tasks_status_all = count_statuses_year(@tasks_all)
   end
 
   private
@@ -177,5 +182,44 @@ class ReportsController < ApplicationController
         next 0 unless task.planned_start_at && task.planned_finish_at
         task.planned_finish_at - task.planned_start_at
       end
+    end
+    def count_statuses_per_day(tasks)
+      Task.statuses.keys.map { |status| tasks.where(status: status).count }
+    end
+    def count_statuses_per_week(tasks)
+        start_date = Date.today.beginning_of_week
+        # 曜日ごとのタスク配列
+        tasks_by_day = []
+
+        7.times do |i|
+          date = start_date + i
+          tasks_on_day = @tasks_week.where(planned_start_at: date.all_day)
+          tasks_by_day << count_statuses_per_day(tasks_on_day)
+        end
+        tasks_by_day
+    end
+    def count_statuses_month(tasks)
+      # 週ごとにステータスごとの件数を格納する配列
+      tasks_by_week = Array.new(6) { Hash.new(0) } # 最大6週分を想定
+
+      tasks.each do |task|
+        next unless task.planned_finish_at
+        day_of_month = task.planned_finish_at.day
+        week_number = (day_of_month - 1) / 7      # 0-indexedにする
+        status = task.status
+
+        tasks_by_week[week_number][status] += 1
+      end
+
+      tasks_by_week
+    end
+    def count_statuses_year(tasks)
+      tasks_by_month = Array.new(12) { Hash.new(0) }
+      tasks.each do |task|
+        month = task.planned_finish_at.month
+        status = task.status
+        tasks_by_month[month][status] += 1
+      end
+      tasks_by_month
     end
 end

@@ -18,6 +18,9 @@ Rails.application.routes.draw do
       patch :give_up
       patch :finish
     end
+    collection do
+      get :future  
+    end
   end
   resources :users, only: %i[show]
   resources :rankings, only: %i[show]

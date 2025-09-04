@@ -22,18 +22,8 @@
 					</tr>
                 </tbody>
             </table>
-            <!-- 合計誤差 -->
-            <h2 class="mt-5">誤差合計</h2>
-			<canvas id="myChart2"></canvas>
-            <table class="table table-striped">
-                <tbody>
-					
-                    <td>
-                        <%= (@total_error_week / 3600).floor %>時間
-                        <%= ((@total_error_week % 3600) / 60).floor %>分
-                    </td>
-                </tbody>
-            </table>
+           <h2 class="mt-5">タスクのステータス</h2>
+			<canvas id="myChart4"></canvas>
         </div>
         <!-- 合計学習時間 -->
         <div class="col-md-4">
@@ -48,6 +38,18 @@
                             <%= ((@total_time_week % 3600) / 60).floor %>分
                         </td>
                     </tr>
+                </tbody>
+            </table>
+			 <!-- 合計誤差 -->
+            <h2 class="mt-5">誤差合計</h2>
+			<canvas id="myChart2"></canvas>
+            <table class="table table-striped">
+                <tbody>
+					
+                    <td>
+                        <%= (@total_error_week / 3600).floor %>時間
+                        <%= ((@total_error_week % 3600) / 60).floor %>分
+                    </td>
                 </tbody>
             </table>
         </div>
@@ -144,7 +146,50 @@ document.addEventListener("turbo:load", function() {
 			y: { beginAtZero: true }
 			}
 		}
+		},
+		{
+			id: 'myChart4',
+			type: 'bar',
+			data: {
+			labels: ["日","月","火","水","木","金","土"],
+			datasets: [
+				{
+				label: "unstarted",
+				data: <%= @tasks_status_week.map { |day| day[0] }.to_json.html_safe %>,
+				backgroundColor: 'rgba(54, 162, 235, 0.5)',
+				borderColor: 'rgba(54, 162, 235, 1)',
+				borderWidth: 1
+				},
+				{
+				label: "working",
+				data: <%= @tasks_status_week.map { |day| day[1] }.to_json.html_safe %>,
+				backgroundColor: 'rgba(255, 99, 132, 0.5)',
+				borderColor: 'rgba(255, 99, 132, 1)',
+				borderWidth: 1
+				},
+				{
+				label: "stopped",
+				data: <%= @tasks_status_week.map { |day| day[2] }.to_json.html_safe %>,
+				backgroundColor: 'rgba(255, 206, 86, 0.5)',
+				borderColor: 'rgba(255, 206, 86, 1)',
+				borderWidth: 1
+				},
+				{
+				label: "done",
+				data: <%= @tasks_status_week.map { |day| day[3] }.to_json.html_safe %>,
+				backgroundColor: 'rgba(75, 192, 192, 0.5)',
+				borderColor: 'rgba(75, 192, 192, 1)',
+				borderWidth: 1
+				}
+			]
+		},
+		options: {
+			scales: {
+			 	x: { stacked: true },
+        		y: { stacked: true, beginAtZero: true }
+			}
 		}
+	}
   ];
 
   charts.forEach(c => {
