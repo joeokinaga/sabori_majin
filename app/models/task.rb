@@ -7,6 +7,7 @@ class Task < ApplicationRecord
    validates :planned_finish_at, presence: true
    validate :finish_after_start
    validate :no_overlap, if: -> { planned_start_at.present? && planned_finish_at.present? }
+   validate :planned_start_at_cannot_be_in_the_past
 
    private
 
@@ -27,6 +28,12 @@ class Task < ApplicationRecord
                     )
         if overlap.exists?
             errors.add(:base, "It overlaps with another task's time")
+        end
+    end
+
+    def planned_start_at_cannot_be_in_the_past
+        if planned_start_at.present? && planned_start_at < Time.zone.now
+          errors.add(:planned_start_at, "は現在時刻以降を指定してください")
         end
     end
 end
