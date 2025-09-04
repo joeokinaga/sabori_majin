@@ -68,7 +68,9 @@ class TasksController < ApplicationController
         planned_start_at: planned_start_at,
         planned_finish_at: planned_finish_at
       ))
-        redirect_to tasks_path, notice: "タスクを更新しました"
+        # redirect_to tasks_path, notice: "タスクを更新しました"
+        # redirect_back fallback_location: tasks_path, notice: "タスクを更新しました"
+        redirect_to future_tasks_path, notice: "タスクを更新しました"
       else
         render :edit, status: :unprocessable_entity
       end
@@ -77,7 +79,9 @@ class TasksController < ApplicationController
     def destroy
       @task = current_user.tasks.find(params[:id])
       @task.destroy
-      redirect_to tasks_path, alert: "タスクを削除しました"
+      # redirect_to tasks_path, alert: "タスクを削除しました"
+      # redirect_back fallback_location: tasks_path, notice: "タスクを削除しました"
+      redirect_to future_tasks_path, alert: "タスクを削除しました"
     end
 
     def start

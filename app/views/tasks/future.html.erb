@@ -31,4 +31,7 @@
   <% else %>
     <div class="text-center my-5" style="font-size:1.2rem;">明日以降のタスクはありません</div>
   <% end %>
+  <div class="text-end">
+    <%= link_to "戻る", request.referer, class: "border px-5 py-3 bg-white text-black", style: "font-size:1rem; text-decoration:none;" %>
+  </div>
 </div>

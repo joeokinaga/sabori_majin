@@ -75,16 +75,6 @@
 </div>
 
 <div class="mt-4 text-center">
-  <% if !@task.working? %>
-    <% link_text =
-        if @task.unstarted? && @task.planned_finish_at.future?
-          "キャンセル"
-        else
-          "戻る"
-        end
-    %>
-
-    <%= link_to link_text, root_path, class: "border px-5 py-3 bg-white text-black", style: "font-size:1rem; text-decoration:none;" %>
-  <% end %>
+  <%= link_to "戻る", request.referer, class: "border px-5 py-3 bg-white text-black", style: "font-size:1rem; text-decoration:none;" %>
 </div>
 
