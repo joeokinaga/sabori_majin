@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "rankings/show"
+  get "ranking/show"
   resources :reports, only: [] do
     collection do
       get :daily
@@ -18,6 +20,7 @@ Rails.application.routes.draw do
     end
   end
   resources :users, only: %i[show]
+  resources :rankings, only: %i[show]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
