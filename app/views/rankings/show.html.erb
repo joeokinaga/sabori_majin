@@ -1,2 +1,4 @@
-<h1>Rankings#show</h1>
-<p>Find me in app/views/rankings/show.html.erb</p>
+<% @all_users.each do |user| %>
+    <p><%= user.name %> <%= user.lazy_score %></p>
+<% end %>
+    
