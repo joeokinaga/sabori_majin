@@ -9,12 +9,12 @@
         <h5 class = "card-header">トータルスコア</h5>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
-                <div class = "fs-6">完了</div>
-                <div class = "text-center"><%= @done_task_all %> pt</div>
+                <div class = "fs-6">完了したタスク</div>
+                <div class = "text-center"><%= @done_task_all %> コ</div>
             </li>
             <li class="list-group-item">
-                <div class = "fs-6">サボり</div>
-                <div class = "text-center"><%= @skip_task_all %> pt</div>
+                <div class = "fs-6">サボりpt</div>
+                <div class = "text-center"><%= @lazy_score_all %> pt</div>
             </li>
         </ul>
     </div>
@@ -22,16 +22,22 @@
         <h5 class = "card-header">今週のスコア</h5>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
-                <div class = "fs-6">完了</div>
-                <div class = "text-center"><%= @done_task_week %> pt</div>
+                <div class = "fs-6">完了したタスク</div>
+                <div class = "text-center"><%= @done_task_week %> コ</div>
             </li>
             <li class="list-group-item">
-                <div class = "fs-6">サボり</div>
-                <div class = "text-center"><%= @skip_task_week %> pt</div>
+                <div class = "fs-6">サボりpt</div>
+                <div class = "text-center"><%= @lazy_score_week %> pt</div>
             </li>
         </ul>
     </div>
 </div>
-
+<% @tasks_all.each do |task| %>
+  <div class="task">
+    <p>タスク名: <%= task.title %></p>
+    <p>開始予定: <%= task.planned_start_at %></p>
+    <p>終了予定: <%= task.planned_finish_at %></p>
+  </div>
+<% end %>
 
 
