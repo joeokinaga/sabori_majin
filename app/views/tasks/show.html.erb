@@ -41,11 +41,12 @@
           if (left < 0) left = 0;
           var min = Math.floor(left / 60);
           var sec = left % 60;
-              var countdownElem = document.getElementById("countdown");
-              if (countdownElem) {
-                countdownElem.textContent =
-                ("0" + min).slice(-2) + ":" + ("0" + sec).slice(-2);
-              }
+          var countdownElem = document.getElementById("countdown");
+          if (countdownElem) {
+            // 分はゼロ埋めしない、秒だけゼロ埋め
+            countdownElem.textContent =
+              min + ":" + ("0" + sec).slice(-2);
+          }
         }
         updateCountdown();
         // setInterval(updateCountdown, 1000);
