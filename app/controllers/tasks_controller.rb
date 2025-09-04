@@ -77,12 +77,7 @@ class TasksController < ApplicationController
     def destroy
       @task = current_user.tasks.find(params[:id])
       @task.destroy
-<<<<<<< HEAD
-      # flash[:danger] = "タスクを削除しました"
-      redirect_to tasks_path, success: "タスクを作成しました"
-=======
       redirect_to tasks_path, alert: "タスクを削除しました"
->>>>>>> main
     end
 
     def start

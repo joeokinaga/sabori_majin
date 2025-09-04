@@ -83,8 +83,9 @@ create_task(user, "明日やること", "明日のタスク内容", :unstarted, 
   end
 end
 
-now = Time.current
-Task.destroy_all
+now = Time.current.in_time_zone("Asia/Tokyo")
+#ptをカウントするために一時的に削除
+# Task.destroy_all
 
 #未着手なので5pt
 Task.create!(
