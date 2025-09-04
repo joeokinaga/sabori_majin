@@ -9,11 +9,31 @@
     </div>
     <!-- 中央: タスク一覧（カード使用） -->
     <div class="col-md-6 d-flex flex-column align-items-center">
+    <%# いい感じのコード %>
       <% @tasks.each do |task| %>
-        <div class="card mb-4" style="min-width:320px; border:2px solid #222;">
-          <div class="card-body px-4 py-3">
-            <div class="d-flex justify-content-between align-items-center" style="font-size:1.35rem;">
-              <%= link_to task.title, task_path(task), class: "text-dark", style: "text-decoration:none;" %>
+      <% 
+        now = Time.current.in_time_zone('Asia/Tokyo')
+        is_black = (task.status == "unstarted") && (now <= task.planned_finish_at)
+        border_color =
+          if task.status == "done"
+            "#28a745" # 緑
+          elsif task.status == "stopped"
+            "#dc3545" # 赤
+          elsif task.status == "unstarted"
+            if now > task.planned_finish_at
+              "#dc3545" # 赤
+            else
+              "#222"    # 黒
+            end
+          else
+            "#222"      # その他は黒
+          end
+      %>
+      <div class="card mb-4" style="min-width:320px; border:2px solid <%= border_color %>;">
+        <div class="card-body px-4 py-3">
+          <div class="d-flex justify-content-between align-items-center" style="font-size:1.35rem;">
+            <%= link_to task.title, task_path(task), class: "text-dark", style: "text-decoration:none;" %>
+            <% if is_black %>
               <span>
                 <%= link_to task_path(task), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, class: "text-decoration-none" do %>
                   🗑️
@@ -22,13 +42,14 @@
                   ✏️
                 <% end %>
               </span>
-            </div>
-            <div class="text-center mt-2" style="font-size:1.1rem;">
-              <%= "#{task.planned_start_at.strftime('%H:%M')}〜#{task.planned_finish_at.strftime('%H:%M')}" %>
-            </div>
+            <% end %>
+          </div>
+          <div class="text-center mt-2" style="font-size:1.1rem;">
+            <%= "#{task.planned_start_at.strftime('%H:%M')}〜#{task.planned_finish_at.strftime('%H:%M')}" %>
           </div>
         </div>
-      <% end %>
+      </div>
+    <% end %>
     </div>
     <!-- 右側: タスクの新規作成 -->
     <div class="col-md-3 d-flex justify-content-center mt-4 mt-md-0">
