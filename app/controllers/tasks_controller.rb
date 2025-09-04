@@ -98,6 +98,12 @@ class TasksController < ApplicationController
       redirect_to tasks_path, notice: "タスクを終了しました"
     end
 
+    def future
+      today = Time.current.in_time_zone('Asia/Tokyo').to_date
+      @future_tasks = Task.where("planned_start_at > ?", today.end_of_day).order(:planned_start_at)
+      @tasks_by_date = @future_tasks.group_by { |task| task.planned_start_at.to_date }
+    end
+
     private
         def task_params
         params.require(:task).permit(:title, :content, :planned_start_at, :planned_finish_at)

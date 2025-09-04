@@ -52,11 +52,14 @@
     <% end %>
     </div>
     <!-- 右側: タスクの新規作成 -->
-    <div class="col-md-3 d-flex justify-content-center mt-4 mt-md-0">
+    <div class="col-md-3 d-flex flex-column justify-content-center mt-4 mt-md-0">
       <%= link_to new_task_path, class: "btn btn-primary", style: "font-size:2rem; min-width:220px;" do %>
         新規タスク作成
       <% end %>
-
+      <br>
+      <%= link_to future_tasks_path, class: "btn btn-primary", style: "font-size:2rem; min-width:220px;" do %>
+        明日以降のタスク
+      <% end %>
     </div>
   </div>
 </div>

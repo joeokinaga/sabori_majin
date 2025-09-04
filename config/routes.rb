@@ -16,6 +16,9 @@ Rails.application.routes.draw do
       patch :give_up
       patch :finish
     end
+    collection do
+      get :future  
+    end
   end
   resources :users, only: %i[show]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

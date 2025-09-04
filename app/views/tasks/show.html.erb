@@ -5,12 +5,17 @@
   <% end %>
   <%= @task.status %>
   <% now = Time.current.in_time_zone('Asia/Tokyo') %>
+  <% today = now.to_date %>
   <% case @task.status.to_sym
     when :unstarted %>
     <!-- 未開始画面 -->
     <div class="d-flex justify-content-center mt-5">
-      <% if now <= @task.planned_finish_at %>
+      <% if @task.planned_start_at.to_date == today && now <= @task.planned_finish_at %>
         <%= button_to "開始", start_task_path(@task), method: :patch, class: "border px-5 py-3 bg-white", style: "font-size:1.5rem;" %>
+      <% elsif @task.planned_start_at.to_date > today %>
+        <div class="text-center my-5" style="font-size:2rem;">
+          <span class="fw-bold text-danger">このタスクは明日以降のためまだ開始できません</span>
+        </div>
       <% else %>
         <div class="text-center my-5" style="font-size:2rem;">
           <span class="fw-bold text-danger">開始時間をオーバーしました。</span>
