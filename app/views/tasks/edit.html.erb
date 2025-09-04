@@ -1,23 +1,43 @@
-<h1>タスク編集</h1>
-<%= form_with(model: @task) do |f| %>
-  <%= render 'shared/error_messages', object: f.object %>
+<div class="container py-5" style="max-width:600px;">
+  <div class="card shadow rounded">
+    <div class="card-body">
+      <h1 class="text-center fw-bold mb-4" style="font-size:2.2rem;">タスク編集</h1>
+      <%= form_with(model: @task, local: true) do |f| %>
+        <%= render 'shared/error_messages', object: f.object %>
 
-  <%= f.label :title, "タスク名", class: "form-label" %>
-  <%= f.text_field :title, class: "form-control" %>
+        <div class="mb-3">
+          <%= f.label :title, "タスク名", class: "form-label fw-bold" %>
+          <%= f.text_field :title, class: "form-control" %>
+        </div>
 
-  <%= f.label :content, "内容", class: "form-label" %>
-  <%= f.text_area :content, class: "form-control", rows: 2 %>
+        <div class="mb-3">
+          <%= f.label :content, "内容", class: "form-label fw-bold" %>
+          <%= f.text_area :content, class: "form-control", rows: 2 %>
+        </div>
 
-  <label>予定時間</label>
-  <div style="display: flex; gap: 8px;">
+        <div class="mb-3">
+          <label class="form-label fw-bold mb-2">予定時間</label>
+          <div class="row gx-2">
+            <div class="col-auto">
+              <%= f.date_field :planned_date, class: "form-control", value: @task.planned_start_at&.to_date %>
+            </div>
+            <div class="col-auto d-flex align-items-center">
+              <%= f.number_field :start_hour, in: 0..23, class: "form-control", placeholder: "時", value: @task.planned_start_at&.hour %>
+              <span class="mx-1">:</span>
+              <%= f.number_field :start_minute, in: 0..59, class: "form-control", placeholder: "分", value: @task.planned_start_at&.min %>
+              <span class="mx-2">〜</span>
+              <%= f.number_field :finish_hour, in: 0..23, class: "form-control", placeholder: "時", value: @task.planned_finish_at&.hour %>
+              <span class="mx-1">:</span>
+              <%= f.number_field :finish_minute, in: 0..59, class: "form-control", placeholder: "分", value: @task.planned_finish_at&.min %>
+            </div>
+          </div>
+        </div>
 
-    <%= f.date_field :planned_date, class: "form-control", value: @task.planned_start_at&.to_date %>
-
-    <%= f.number_field :start_hour, in: 0..23, class: "form-control", placeholder: "時", value: @task.planned_start_at&.hour %> :
-    <%= f.number_field :start_minute, in: 0..59, class: "form-control", placeholder: "分", value: @task.planned_start_at&.min %> 〜
-
-    <%= f.number_field :finish_hour, in: 0..23, class: "form-control", placeholder: "時", value: @task.planned_finish_at&.hour %> :
-    <%= f.number_field :finish_minute, in: 0..59, class: "form-control", placeholder: "分", value: @task.planned_finish_at&.min %>
+        <div class="d-flex justify-content-center gap-3 mt-4">
+          <%= f.submit "更新", class: "btn btn-primary px-4" %>
+          <%= link_to "キャンセル", future_tasks_path, class: "btn btn-secondary px-4" %>
+        </div>
+      <% end %>
+    </div>
   </div>
-  <%= f.submit "更新", class: "btn btn-primary" %>
-<% end %>
+</div>
