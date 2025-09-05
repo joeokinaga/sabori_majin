@@ -1,6 +1,8 @@
 <nav class="navbar bg-dark" data-bs-theme="dark">
     <div class="container-fluid ">
-        <%= link_to "サボり魔人", root_path, class: "navbar-brand fw-bold fs-2 ms-3 me-auto"%>
+        <%= link_to root_path, class: "navbar-brand ms-3 me-auto" do %>
+            <%= image_tag "Saboly_logo.png", height: '40', alt: 'Saboly' %>
+        <% end %>
         <ul class="navbar-nav d-flex flex-row ms-auto align-items-center">
             <% if user_signed_in? %>
                 <li class = "nav-item dropdown">
