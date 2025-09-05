@@ -66,6 +66,10 @@ class ReportsController < ApplicationController
     end
     @completion_rate_all = calc_completion_rate(@tasks_all)
     @total_time_all = calc_total_time(@tasks_all)
+    @total_time_all_per_month_hours = calc_total_time_year(@tasks_all).values.map do |s|
+      value = s.is_a?(Array) ? s.first : s
+      (value / 3600.0).round(1)
+    end
     @total_error_all = calc_task_time_error(@tasks_all)
     @tasks_status_all = count_statuses_year(@tasks_all)
   end
