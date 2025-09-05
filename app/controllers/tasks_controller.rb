@@ -103,8 +103,9 @@ class TasksController < ApplicationController
     end
 
     def future
+      @tasks = current_user.tasks
       today = Time.current.in_time_zone('Asia/Tokyo').to_date
-      @future_tasks = Task.where("planned_start_at > ?", today.end_of_day).order(:planned_start_at)
+      @future_tasks = current_user.tasks.where("planned_start_at > ?", today.end_of_day).order(:planned_start_at)
       @tasks_by_date = @future_tasks.group_by { |task| task.planned_start_at.to_date }
     end
 
