@@ -1,45 +1,145 @@
 <div class="container my-5 py-5" style="max-width:1200px;">
   <h1 class="text-center fw-bold mb-5" style="font-size:3rem;">今日のタスク</h1>
-  <div class="row justify-content-center align-items-start g-4">
-    <!-- 中央: タスク一覧（カード使用） -->
-    <div class="col-md-6 d-flex flex-column align-items-center">
-      <% @tasks.each do |task| %>
-        <% 
-          now = Time.current.in_time_zone('Asia/Tokyo')
-          border_color =
-            if task.status == "done"
-              "#28a745" # 緑
-            elsif task.status == "stopped"
-              "#ff0000" # 茶色
-            elsif task.status == "unstarted"
-              now > task.planned_finish_at ? "#ff0000" : "#222"
-            else
-              "#222"
-            end
-        %>
-        <div class="card mb-4 shadow rounded w-100" style="max-width:520px; min-width:320px; border:2px solid <%= border_color %>;">
-          <div class="card-body px-4 py-3">
-            <div class="text-center fw-bold" style="font-size:1.35rem;">
-              <%= link_to task.title, task_path(task), class: "text-dark text-decoration-none" %>
-            </div>
-            <div class="text-center mt-2 text-muted" style="font-size:1.1rem;">
-              <%= "#{task.planned_start_at.strftime('%H:%M')}〜#{task.planned_finish_at.strftime('%H:%M')}" %>
-            </div>
+  <div class="row">
+    <!-- 0時〜12時 カレンダー -->
+    <div class="col-md-4" style="position:relative; min-width:160px; max-width:500px;">
+      <div style="position:relative; height:1440px; border:1px solid #ccc; border-radius:8px; background:#f8f9fa;">
+        <% (0..12).each do |hour| %>
+          <div style="position:absolute; left:0; top:<%= hour * 120 %>px; width:100%; border-top:1px solid #e0e0e0;">
+            <span class="text-dark" style="position:absolute; left:-52px; width:48px; text-align:right; color:#888; font-size:0.95rem;">
+              <%= "%02d:00" % hour %>
+            </span>
           </div>
-        </div>
-      <% end %>
+        <% end %>
+        <% @tasks.each do |task| %>
+          <% 
+            start_time = task.planned_start_at
+            finish_time = task.planned_finish_at
+            start_hour = start_time.hour + start_time.min / 60.0
+            finish_hour = finish_time.hour + finish_time.min / 60.0
+            # 0時〜12時にかかるタスクのみ
+            if finish_hour > 0 && start_hour < 12
+              top = [start_hour, 0].max * 120
+              bottom = [finish_hour, 12].min * 120
+              height = [bottom - top, 40].max
+              now = Time.current.in_time_zone('Asia/Tokyo')
+              border_color =
+                if task.status == "done"
+                  "#28a745"
+                elsif task.status == "stopped"
+                  "#ff0000"
+                elsif task.status == "unstarted"
+                  now > task.planned_finish_at ? "#ff0000" : "#222"
+                else
+                  "#222"
+                end
+              font_size = height < 50 ? "0.9rem" : "1rem"
+              tooltip_text = "#{task.title}(#{task.planned_start_at.strftime('%H:%M')}〜#{task.planned_finish_at.strftime('%H:%M')})"
+          %>
+            <div style="
+              position:absolute; left:52px; right:12px;
+              top:<%= top %>px; height:<%= height %>px; z-index:2;
+            ">
+              <div class="card shadow-sm" style="height:100%; border:2px solid <%= border_color %>; background:#fff; overflow:hidden;">
+                <div class="card-body py-2 px-3 d-flex flex-column justify-content-center" style="height:100%;">
+                  <div
+                    class="fw-bold text-center"
+                    style="font-size:<%= font_size %>; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:pointer;"
+                    title="<%= tooltip_text %>"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                  >
+                    <%= link_to task.title, task_path(task), class: "text-dark text-decoration-none" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
     </div>
-    <!-- 右側: タスクの新規作成 -->
-    <div class="col-md-3 d-flex flex-column justify-content-start align-items-center mt-4 mt-md-0">
-      <%= link_to new_task_path, class: "btn btn-primary mb-4 w-100", style: "font-size:2rem; min-width:220px;" do %>
+    <!-- 12時〜24時 カレンダー -->
+    <div class="col-md-4" style="position:relative; min-width:160px; max-width:500px;">
+      <div style="position:relative; height:1440px; border:1px solid #ccc; border-radius:8px; background:#f8f9fa;">
+        <% (12..24).each do |hour| %>
+          <div style="position:absolute; left:0; top:<%= (hour-12) * 120 %>px; width:100%; border-top:1px solid #e0e0e0;">
+            <span class="text-dark" style="position:absolute; right:-52px; left:auto; width:48px; text-align:left; color:#888; font-size:0.95rem">
+              <%= "%02d:00" % hour %>
+            </span>
+          </div>
+        <% end %>
+        <% @tasks.each do |task| %>
+          <% 
+            start_time = task.planned_start_at
+            finish_time = task.planned_finish_at
+            start_hour = start_time.hour + start_time.min / 60.0
+            finish_hour = finish_time.hour + finish_time.min / 60.0
+            # 12時〜24時にかかるタスクのみ
+            if finish_hour > 12 && start_hour < 24
+              top = [start_hour, 12].max * 120 - 1440
+              bottom = [finish_hour, 24].min * 120 - 1440
+              height = [bottom - top, 40].max
+              now = Time.current.in_time_zone('Asia/Tokyo')
+              border_color =
+                if task.status == "done"
+                  "#28a745"
+                elsif task.status == "stopped"
+                  "#ff0000"
+                elsif task.status == "unstarted"
+                  now > task.planned_finish_at ? "#ff0000" : "#222"
+                else
+                  "#222"
+                end
+              font_size = height < 50 ? "0.9rem" : "1rem"
+              tooltip_text = "#{task.title}(#{task.planned_start_at.strftime('%H:%M')}〜#{task.planned_finish_at.strftime('%H:%M')})"
+          %>
+            <div style="
+              position:absolute; left:52px; right:12px;
+              top:<%= top %>px; height:<%= height %>px; z-index:2;
+            ">
+              <div class="card shadow-sm" style="height:100%; border:2px solid <%= border_color %>; background:#fff; overflow:hidden;">
+                <div class="card-body py-2 px-3 d-flex flex-column justify-content-center" style="height:100%;">
+                  <div
+                    class="fw-bold text-center"
+                    style="font-size:<%= font_size %>; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:pointer;"
+                    title="<%= tooltip_text %>"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                  >
+                    <%= link_to task.title, task_path(task), class: "text-dark text-decoration-none" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    <!-- ボタン -->
+    <div class="col-md-4 d-flex flex-column justify-content-start align-items-center mt-4 mt-md-0">
+      <%= link_to new_task_path, class: "btn btn-primary mb-4", style: "font-size:2rem; min-width:220px;" do %>
         新規タスク作成
       <% end %>
-      <%= link_to future_tasks_path, class: "btn btn-outline-secondary mb-4 w-100", style: "font-size:1.5rem;" do %>
+      <%= link_to future_tasks_path, class: "btn btn-outline-dark  text-center mb-4", style: "font-size:1.5rem; width:245px;" do %>
         明日以降のタスク
       <% end %>
-      <%= link_to all_reports_path, class: "btn btn-outline-dark w-100 text-center", style: "font-size:1.5rem;" do %>
+      <%= link_to all_reports_path, class: "btn btn-outline-dark  text-center", style: "font-size:1.5rem; width:245px;" do %>
         個人成績
       <% end %>
     </div>
   </div>
 </div>
+
+<script>
+  function initBootstrapTooltips() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+      if (tooltipTriggerEl._tooltip) {
+        tooltipTriggerEl._tooltip.dispose();
+      }
+      tooltipTriggerEl._tooltip = new bootstrap.Tooltip(tooltipTriggerEl);
+    })
+  }
+  document.addEventListener("DOMContentLoaded", initBootstrapTooltips);
+  document.addEventListener("turbo:load", initBootstrapTooltips);
+</script>
