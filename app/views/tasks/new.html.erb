@@ -19,20 +19,20 @@
           <label class="form-label fw-bold mb-2">予定時間</label>
           <div class="row gx-2">
             <div class="col-auto">
-              <%= f.date_field :planned_date, class: "form-control" %>
+              <%= f.date_field :planned_date, class: "form-control", value: Time.current.strftime("%Y-%m-%d") %>
             </div>
             <div class="col-auto d-flex align-items-center">
-              <%= f.number_field :start_hour, in: 0..23, class: "form-control", placeholder: "時" %>
+            <div class="col-auto d-flex align-items-center">
+              <%= f.number_field :start_hour, in: 0..23, class: "form-control", placeholder: "時", value: Time.current.hour %>
               <span class="mx-1">:</span>
-              <%= f.number_field :start_minute, in: 0..59, class: "form-control", placeholder: "分" %>
+              <%= f.number_field :start_minute, in: 0..59, class: "form-control", placeholder: "分", value: Time.current.min %>
               <span class="mx-2">〜</span>
-              <%= f.number_field :finish_hour, in: 0..23, class: "form-control", placeholder: "時" %>
+              <%= f.number_field :finish_hour, in: 0..23, class: "form-control", placeholder: "時", value: (Time.current + 30.minutes).hour %>
               <span class="mx-1">:</span>
-              <%= f.number_field :finish_minute, in: 0..59, class: "form-control", placeholder: "分" %>
+              <%= f.number_field :finish_minute, in: 0..59, class: "form-control", placeholder: "分", value: (Time.current + 30.minutes).min %>
             </div>
           </div>
         </div>
-
         <div class="d-flex justify-content-center gap-3 mt-4">
           <%= f.submit "作成", class: "btn btn-primary px-4" %>
           <%= link_to "キャンセル", root_path, class: "btn btn-secondary px-4" %>

@@ -15,6 +15,11 @@ class TasksController < ApplicationController
 
     def new
       @task = current_user.tasks.build
+      now = Time.current.in_time_zone('Asia/Tokyo')
+      @task = @current_user.tasks.new(
+        planned_start_at: now,
+        planned_finish_at: now + 30.minutes
+      )
     end
 
     def create
