@@ -18,9 +18,13 @@
       <h3 class="m-5 fw-bold fs-2">
         あなたは <span class="display-5 fw-bold"><%= @user_rank %> 位 </span>です
       </h3>
-      <h3 class="m-5 fw-bold fs-2">
+      <h3 class="m-5 fw-bold fs-1 text-center p-4 rounded shadow-lg bg-white border border-warning"
+          style="transition: transform 0.3s, box-shadow 0.3s;"
+          onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 0 30px #fff';"
+          onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 0 10px #000';">
         <%= @user_message %>
       </h3>
+
     </div>
   
     <div class="row justify-content-center pt-3">
