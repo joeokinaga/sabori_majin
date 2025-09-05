@@ -1,36 +1,42 @@
-<h2 class="text-center mb-4 mt-3">サインアップ</h2>
+<div class="container py-5" style="max-width:600px;">
+  <div class="card shadow rounded">
+    <div class="card-body">
+      <h1 class="text-center fw-bold mb-4" style="font-size:2.2rem;">サインアップ</h1>
 
-<div class="row">
-  <div class="col-md-6 offset-md-3">
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
 
-      <div class="mb-3">
-        <%= f.label :name, "名前", class: "form-label" %>
-        <%= f.text_field :name, class: "form-control" %>
+        <div class="mb-3">
+          <%= f.label :name, "名前", class: "form-label fw-bold" %>
+          <%= f.text_field :name, class: "form-control" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :email, "メールアドレス", class: "form-label fw-bold" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :password, "パスワード", class: "form-label fw-bold" %>
+          <% if @minimum_password_length %>
+            <small class="text-muted">（<%= @minimum_password_length %>文字以上）</small>
+          <% end %>
+          <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :password_confirmation, "パスワード（確認）", class: "form-label fw-bold" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
+        </div>
+
+        <div class="d-grid mt-4">
+          <%= f.submit "サインアップ", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+
+      <div class="text-center mt-3">
+        <%= link_to "ログインはこちら", new_session_path(resource_name), class: "text-decoration-none" %>
       </div>
-
-      <div class="mb-3">
-        <%= f.label :email, "メールアドレス", class: "form-label" %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
-      </div>
-
-      <div class="mb-3">
-        <%= f.label :password, "パスワード", class: "form-label" %>
-        <% if @minimum_password_length %>
-          <small class="text-muted">（<%= @minimum_password_length %>文字以上）</small>
-        <% end %>
-        <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
-      </div>
-
-      <div class="mb-3">
-        <%= f.label :password_confirmation, "パスワード（確認）", class: "form-label" %>
-        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
-      </div>
-
-      <div class="d-grid">
-        <%= f.submit "サインアップ", class: "btn btn-primary" %>
-      </div>
-    <% end %>
+    </div>
   </div>
 </div>
