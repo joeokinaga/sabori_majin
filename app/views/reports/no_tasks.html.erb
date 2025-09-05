@@ -1,0 +1,22 @@
+<%# app/views/reports/no_tasks.html.erb %>
+
+<div class="container-fluid mt-5">
+    <div class="text-center">
+        <h1>Daily Report</h1>
+        <%# ナビゲーションボタンは一貫性を保つために残します %>
+        <%= link_to "Daily", daily_reports_path, class: "btn #{current_page?(daily_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "Weekly", weekly_reports_path, class: "btn #{current_page?(weekly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "Monthly", monthly_reports_path, class: "btn #{current_page?(monthly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "Yearly", yearly_reports_path, class: "btn #{current_page?(yearly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "All", all_reports_path, class: "btn #{current_page?(all_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+    </div>
+
+    <div class="text-center mt-5 pt-5">
+        <h2 class="text-muted">タスクは登録されていません</h2>
+        <p class="lead">新しいタスクを登録して、一日を始めましょう！</p>
+        <div class="mt-4">
+            <%# タスク新規作成ページへのリンク（パスはご自身のアプリに合わせて変更してください） %>
+            <%= link_to "新しいタスクを登録する", new_task_path, class: "btn btn-success btn-lg" %>
+        </div>
+    </div>
+</div>
