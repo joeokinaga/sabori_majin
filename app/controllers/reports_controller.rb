@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-  # before_action :authenticate_user!
+  before_action :authenticate_user!
   before_action :set_user_tasks, only: [ :daily, :weekly, :monthly, :yearly, :all ]
 
   def daily
@@ -76,7 +76,7 @@ class ReportsController < ApplicationController
 
   private
     def set_user_tasks
-      @user_tasks = (current_user || User.first).tasks
+      @user_tasks = current_user.tasks
     end
 
     def calc_completion_rate(tasks)
