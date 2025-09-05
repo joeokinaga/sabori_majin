@@ -8,3 +8,18 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+ .task-app-bg {
+    position: fixed;
+    inset: 0;
+    background-color: #f7f7f7;
+    background-image: radial-gradient(#333232 1px, transparent 1px);
+    background-size: 20px 20px;
+    z-index: -1;
+    font-family: "Caveat", "Patrick Hand", cursive; /* 手書き風フォント */
+    overflow: hidden;
+  }
+  
+  body {
+    font-family: 'Kosugi Maru', sans-serif;
+  }
