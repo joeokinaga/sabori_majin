@@ -8,7 +8,7 @@ class Task < ApplicationRecord
    validate :finish_after_start
    validate :no_overlap, if: -> { planned_start_at.present? && planned_finish_at.present? }
 #    validate :planned_start_at_cannot_be_in_the_past
-
+   validate :minimum_duration
    private
 
     def finish_after_start
@@ -33,7 +33,14 @@ class Task < ApplicationRecord
 
     def planned_start_at_cannot_be_in_the_past
         if planned_start_at.present? && planned_start_at < Time.zone.now
-          errors.add(:planned_start_at, "は現在時刻以降を指定してください")
+          errors.add(:base, "The planned start time cannot be in the past")
+        end
+    end
+
+    def minimum_duration
+        return if planned_start_at.blank? || planned_finish_at.blank?
+        if planned_finish_at < planned_start_at + 10.minutes
+          errors.add(:base, "The task duration must be at least 10 minutes")
         end
     end
 end
