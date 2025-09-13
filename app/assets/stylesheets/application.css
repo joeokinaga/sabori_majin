@@ -23,3 +23,17 @@
   body {
     font-family: 'Kosugi Maru', sans-serif;
   }
+
+  .btn.btn-outline-dark {
+    background-color: #fff;
+    color: #212529;
+    border-color: #212529;
+    transition: background 0.2s, color 0.2s;
+  }
+  .btn.btn-outline-dark:hover,
+  .btn.btn-outline-dark:focus,
+  .btn.btn-outline-dark:active {
+    background-color: #212529;
+    color: #fff;
+    border-color: #212529;
+  }
