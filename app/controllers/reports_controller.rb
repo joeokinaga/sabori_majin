@@ -220,7 +220,7 @@ class ReportsController < ApplicationController
     def count_statuses_year(tasks)
       tasks_by_month = Array.new(12) { Hash.new(0) }
       tasks.each do |task|
-        month = task.planned_finish_at.month
+        month = task.planned_finish_at.month - 1
         status = task.status
         tasks_by_month[month][status] += 1
       end

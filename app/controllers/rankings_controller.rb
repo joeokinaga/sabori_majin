@@ -45,7 +45,7 @@ class RankingsController < ApplicationController
     @user_rank = @all_users_with_rank.find { |ur| ur[:user].id == current_user.id }[:rank]
 
     @total_users = @all_users_with_rank.size
-    percentile = @user_rank / @total_users
+    percentile = @user_rank.to_f / @total_users
     if percentile <= 0.25
       @user_message = ai_message(:fail)
     elsif percentile <= 0.8
