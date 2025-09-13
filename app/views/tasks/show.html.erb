@@ -74,7 +74,8 @@
   <% end %>
 </div>
 
-<div class="mt-4 text-center">
-  <%= link_to "戻る", request.referer, class: "border px-5 py-3 bg-white text-black", style: "font-size:1rem; text-decoration:none;" %>
-</div>
-
+<% if (@task.unstarted? && Time.current.in_time_zone('Asia/Tokyo') <= @task.planned_finish_at) || @task.stopped? || @task.done? %>
+  <div class="mt-4 text-center">
+    <%= link_to "戻る", request.referer, class: "border px-5 py-3 bg-white text-black", style: "font-size:1rem; text-decoration:none;" %>
+  </div>
+<% end %>
