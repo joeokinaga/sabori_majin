@@ -24,7 +24,9 @@ end_date = 1.month.from_now.to_date
 users.each do |user|
   (start_date..end_date).to_a.each do |day|
     daily_tasks = []
+    i = 0
     3.times do
+      i += 1
       loop do
         planned_start_at = Faker::Time.between_dates(from: day, to: day, period: :day)
         duration = rand(min_duration..max_duration)
@@ -53,7 +55,7 @@ users.each do |user|
 
         daily_tasks << Task.new(
           user: user,
-          title: Faker::Lorem.sentence(word_count: 3),
+          title: "#{user.name}_#{day}_0#{i}",
           planned_start_at: planned_start_at,
           planned_finish_at: planned_finish_at,
           started_at: started_at,
