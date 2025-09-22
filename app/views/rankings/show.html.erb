@@ -5,13 +5,23 @@
       </h1>
   
       <%= form_with url: ranking_path(current_user), method: :get, local: true, id: "period_form" do %>
-        <div class="d-flex justify-content-center mb-4">
-            <%= button_tag "1日",     type: "submit", name: "period", value: "1day",   class: "btn btn-primary btn-lg fw-bold me-2" %>
-            <%= button_tag "1週間",   type: "submit", name: "period", value: "1week",  class: "btn btn-primary btn-lg fw-bold me-2" %>
-            <%= button_tag "1か月",   type: "submit", name: "period", value: "1month", class: "btn btn-primary btn-lg fw-bold me-2" %>
-            <%= button_tag "1年",     type: "submit", name: "period", value: "1year",  class: "btn btn-primary btn-lg fw-bold me-2" %>
-            <%= button_tag "全期間", type: "submit", name: "period", value: "all",    class: "btn btn-primary btn-lg fw-bold" %>
-        </div>
+      <div class="d-flex justify-content-center mb-4">
+        <%= button_tag "1日", type: "submit", name: "period", value: "1day",
+            class: "btn btn-lg fw-bold me-2 #{params[:period] == '1day' ? 'btn-secondary' : 'btn-primary'}" %>
+      
+        <%= button_tag "1週間", type: "submit", name: "period", value: "1week",
+            class: "btn btn-lg fw-bold me-2 #{params[:period] == '1week' ? 'btn-secondary' : 'btn-primary'}" %>
+      
+        <%= button_tag "1か月", type: "submit", name: "period", value: "1month",
+            class: "btn btn-lg fw-bold me-2 #{params[:period] == '1month' ? 'btn-secondary' : 'btn-primary'}" %>
+      
+        <%= button_tag "1年", type: "submit", name: "period", value: "1year",
+            class: "btn btn-lg fw-bold me-2 #{params[:period] == '1year' ? 'btn-secondary' : 'btn-primary'}" %>
+      
+        <%= button_tag "全期間", type: "submit", name: "period", value: "all",
+            class: "btn btn-lg fw-bold #{(params[:period] || 'all') == 'all' ? 'btn-secondary' : 'btn-primary'}" %>
+      </div>      
+      
       <% end %>
     
   
