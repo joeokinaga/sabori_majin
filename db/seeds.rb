@@ -8,7 +8,7 @@ Task.destroy_all
 User.destroy_all
 
 # --- ユーザー作成 ---
-user_count = 10
+user_count = 1
 users = user_count.times.map do |i|
   User.create!(
     name: "User#{i + 1}",
@@ -41,14 +41,19 @@ users.each do |user|
         ).exists?
         next if overlap
 
-        started_at = planned_start_at + rand(-5..15).minutes
-        finished_at = started_at + rand((duration * 0.5).to_i..duration.to_i).seconds
-        status = [:unstarted, :working, :stopped, :done].sample
+        status = [:unstarted, :stopped, :done].sample
+        if status == :unstarted
+          started_at = nil
+          finished_at = nil
+        else
+          started_at = planned_start_at + rand(-5..15).minutes
+          finished_at = started_at + rand((duration * 0.5).to_i..duration.to_i).seconds
+        end
+        
 
         daily_tasks << Task.new(
           user: user,
           title: Faker::Lorem.sentence(word_count: 3),
-          content: Faker::Lorem.paragraph,
           planned_start_at: planned_start_at,
           planned_finish_at: planned_finish_at,
           started_at: started_at,
