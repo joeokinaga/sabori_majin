@@ -7,7 +7,7 @@ class Task < ApplicationRecord
    validates :planned_finish_at, presence: true
    validate :finish_after_start
    validate :no_overlap, if: -> { planned_start_at.present? && planned_finish_at.present? }
-#    validate :planned_start_at_cannot_be_in_the_past
+   validate :planned_start_at_cannot_be_in_the_past
    validate :minimum_duration
    private
 
