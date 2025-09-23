@@ -6,7 +6,7 @@ include LazyScoreCalculator
 Task.destroy_all
 User.destroy_all
 
-user_count = 1
+user_count = 10
 users = user_count.times.map do |i|
   User.create!(
     name: "User#{i + 1}",
