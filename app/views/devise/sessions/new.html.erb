@@ -23,13 +23,13 @@
           </div>
         <% end %>
 
-        <div class="d-grid mb-3">
+        <div class="d-grid mt-4">
           <%= f.submit "ログイン", class: "btn btn-primary" %>
         </div>
       <% end %>
 
       <div class="text-center mt-3">
-        <%= render "devise/shared/links" %>
+        <%= link_to "サインアップはこちら", new_registration_path(resource_name), class: "text-decoration-none" %>
       </div>
     </div>
   </div>
