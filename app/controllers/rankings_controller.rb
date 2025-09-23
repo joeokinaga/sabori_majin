@@ -2,8 +2,7 @@ class RankingsController < ApplicationController
   include LazyScoreCalculator
   before_action :authenticate_user!, only: [:show]
   def show
-    # 期間を取得（デフォルトは1日）
-    @period = params[:period] || "1day"
+    @period = params[:period] || "all"
 
     now = Time.current.in_time_zone("Asia/Tokyo")
 
