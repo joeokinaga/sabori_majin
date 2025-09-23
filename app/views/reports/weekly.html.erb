@@ -1,11 +1,11 @@
 <div class="container-fluid mt-5">
     <div class="text-center">
-        <h1>Weekly Report</h1>
-        <%= link_to "Daily", daily_reports_path, class: "btn #{current_page?(daily_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
-        <%= link_to "Weekly", weekly_reports_path, class: "btn #{current_page?(weekly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
-        <%= link_to "Monthly", monthly_reports_path, class: "btn #{current_page?(monthly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
-        <%= link_to "Yearly", yearly_reports_path, class: "btn #{current_page?(yearly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
-        <%= link_to "All", all_reports_path, class: "btn #{current_page?(all_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <h1>個人成績</h1>
+        <%= link_to "1日", daily_reports_path, class: "btn #{current_page?(daily_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "1週間", weekly_reports_path, class: "btn #{current_page?(weekly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "1か月", monthly_reports_path, class: "btn #{current_page?(monthly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "1年", yearly_reports_path, class: "btn #{current_page?(yearly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "全期間", all_reports_path, class: "btn #{current_page?(all_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
     </div>
     <div class="row align-items-baseline">
         <div class="col-md-3 text-center">
@@ -43,7 +43,15 @@
                     <div class="border-bottom mb-3 pb-2">
                         <h5 class="card-title"><%= task.title %></h5>
                         <p class="card-text"><%= task.content %></p>
-                        <p class="mb-0"><strong>ステータス:</strong> <%= task.status %> </p>
+                        <p class="mb-0">
+						<strong>ステータス:</strong>
+							<%= {
+								"unstarted" => "未着手",
+								"working"   => "作業中",
+								"stopped"   => "中止",
+								"done"      => "完了"
+							}[task.status] %>
+						</p>
                         <p class="mb-0"><strong>予定開始:</strong> <%= task.planned_start_at.strftime("%Y-%m-%d %H:%M") %></p>
                         <p class="mb-0"><strong>予定終了:</strong> <%= task.planned_finish_at.strftime("%Y-%m-%d %H:%M") %></p>
                         <p class="mb-0"><strong>実開始:</strong> <%= task.started_at ? task.started_at.strftime("%Y-%m-%d %H:%M") : "-" %></p>

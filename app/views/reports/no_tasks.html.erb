@@ -4,11 +4,11 @@
     <div class="text-center">
         <h1>Daily Report</h1>
         <%# ナビゲーションボタンは一貫性を保つために残します %>
-        <%= link_to "Daily", daily_reports_path, class: "btn #{current_page?(daily_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
-        <%= link_to "Weekly", weekly_reports_path, class: "btn #{current_page?(weekly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
-        <%= link_to "Monthly", monthly_reports_path, class: "btn #{current_page?(monthly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
-        <%= link_to "Yearly", yearly_reports_path, class: "btn #{current_page?(yearly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
-        <%= link_to "All", all_reports_path, class: "btn #{current_page?(all_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "1日", daily_reports_path, class: "btn #{current_page?(daily_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "1週間", weekly_reports_path, class: "btn #{current_page?(weekly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "1か月", monthly_reports_path, class: "btn #{current_page?(monthly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "1年", yearly_reports_path, class: "btn #{current_page?(yearly_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
+        <%= link_to "全期間", all_reports_path, class: "btn #{current_page?(all_reports_path) ? 'btn-secondary' : 'btn-primary'}" %>
     </div>
 
     <div class="text-center mt-5 pt-5">
