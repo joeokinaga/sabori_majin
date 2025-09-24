@@ -141,28 +141,28 @@ document.addEventListener("turbo:load", function() {
 				labels: <%=@tasks_status_all.each_index.map { |i| "#{i}月" }.to_json.html_safe%>,
 				datasets: [
 				{
-					label: "unstarted",
+					label: "未着手",
 					data: <%= @tasks_status_all.map { |month| month["unstarted"] || 0 }.to_json.html_safe %>,
 					backgroundColor: 'rgba(54, 162, 235, 0.5)',
 					borderColor: 'rgba(54, 162, 235, 1)',
 					borderWidth: 1
 				},
 				{
-					label: "working",
+					label: "作業中",
 					data: <%= @tasks_status_all.map { |month| month["working"] || 0 }.to_json.html_safe %>,
 					backgroundColor: 'rgba(255, 99, 132, 0.5)',
 					borderColor: 'rgba(255, 99, 132, 1)',
 					borderWidth: 1
 				},
 				{
-					label: "stopped",
+					label: "中止",
 					data: <%= @tasks_status_all.map { |month| month["stopped"] || 0 }.to_json.html_safe %>,
 					backgroundColor: 'rgba(255, 206, 86, 0.5)',
 					borderColor: 'rgba(255, 206, 86, 1)',
 					borderWidth: 1
 				},
 				{
-					label: "done",
+					label: "完了",
 					data: <%= @tasks_status_all.map { |month| month["done"] || 0 }.to_json.html_safe %>,
 					backgroundColor: 'rgba(75, 192, 192, 0.5)',
 					borderColor: 'rgba(75, 192, 192, 1)',
