@@ -25,7 +25,7 @@
             <div class="col-auto d-flex align-items-center">
               <%= f.number_field :start_hour, in: 0..23, class: "form-control", placeholder: "時", value: Time.current.hour %>
               <span class="mx-1">:</span>
-              <%= f.number_field :start_minute, in: 0..59, class: "form-control", placeholder: "分", value: Time.current.min %>
+              <%= f.number_field :start_minute, in: 0..59, class: "form-control", placeholder: "分", value: (Time.current + 1.minute).min %>
               <span class="mx-2">〜</span>
               <%= f.number_field :finish_hour, in: 0..23, class: "form-control", placeholder: "時", value: (Time.current + 30.minutes).hour %>
               <span class="mx-1">:</span>
