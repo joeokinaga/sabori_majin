@@ -41,7 +41,7 @@
 ### 1. リポジトリをクローン
 
 ```bash
-git clone https://github.com/YOUR_NAME/sabori_majin.git
+git clone https://github.com/joeokinaga/sabori_majin.git
 cd sabori_majin
 ```
 
