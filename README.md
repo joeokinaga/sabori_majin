@@ -1,24 +1,67 @@
-# README
+# サボり魔人
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+タスクのサボり度をスコア化して、全ユーザーで「誰が一番サボったか」を晒し合う恥晒しランキングアプリです。スコアが高いほど上位＝より恥ずかしい。
 
-Things you may want to cover:
+## 主な機能
 
-* Ruby version
+- タスクの作成・編集・削除（予定開始/終了時刻を指定）
+- タスクのステータス管理（未着手 / 作業中 / 中断 / 完了）
+- サボりスコア（lazy_score）の自動計算
+- 全ユーザーのランキング表示（1日 / 1週間 / 1ヶ月 / 1年 / 全期間で絞り込み可）
+- ユーザー認証（新規登録・ログイン・ログアウト）
 
-* System dependencies
+## サボりスコアとは
 
-* Configuration
+タスクの状態に応じてスコアが加算されます。スコアが高いほど上位にランクされますが、それは「よりサボった」という意味です。上位＝恥晒し。
 
-* Database creation
+| 状況 | スコア |
+|---|---|
+| 予定開始時刻を3分以上過ぎても未着手 | +5pt |
+| タスクを中断（stopped） | +2pt |
+| 予定開始時刻より3分以上遅れてスタート | +2pt |
+| 予定終了時刻より3分以上早くスタート | +1pt |
+| 実作業時間が予定の80%未満で終了 | +1pt |
 
-* Database initialization
+## 技術スタック
 
-* How to run the test suite
+| カテゴリ | 技術 |
+|---|---|
+| バックエンド | Ruby on Rails 8 |
+| フロントエンド | Hotwire（Turbo / Stimulus） |
+| 認証 | Devise |
+| DB | SQLite3 |
 
-* Services (job queues, cache servers, search engines, etc.)
+## 動作環境
 
-* Deployment instructions
+- Ruby 3.4.4
+- Rails 8.0.2
 
-* ...
+## セットアップ
+
+### 1. リポジトリをクローン
+
+```bash
+git clone https://github.com/YOUR_NAME/sabori_majin.git
+cd sabori_majin
+```
+
+### 2. gemをインストール
+
+```bash
+bundle install
+```
+
+### 3. DBをセットアップ
+
+```bash
+bin/rails db:create db:migrate
+```
+
+### 4. サーバーを起動
+
+```bash
+bin/rails server
+```
+
+ブラウザで `http://localhost:3000` にアクセスしてください。
+
